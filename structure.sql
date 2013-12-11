@@ -3,16 +3,28 @@
 -- Server version:               5.1.49 - Source distribution
 -- Server OS:                    unknown-linux-gnu
 -- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2013-04-12 00:48:15
+-- Date/time:                    2013-12-11 01:14:12
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!40014 SET FOREIGN_KEY_CHECKS=0 */;
 
--- Dumping database structure for home_portal
-CREATE DATABASE IF NOT EXISTS `home_portal` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `home_portal`;
+-- Dumping structure for table home_portal.calendars
+CREATE TABLE IF NOT EXISTS `calendars` (
+  `calendar_id` int(10) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `private` tinyint(1) NOT NULL DEFAULT '0',
+  `family_id` int(11) NOT NULL,
+  PRIMARY KEY (`calendar_id`),
+  KEY `user_id` (`user_id`),
+  KEY `public` (`private`),
+  KEY `family_id` (`family_id`),
+  KEY `title` (`title`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
 
 
 -- Dumping structure for table home_portal.calendar_events
@@ -22,6 +34,7 @@ CREATE TABLE IF NOT EXISTS `calendar_events` (
   `private` int(10) NOT NULL DEFAULT '0',
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci,
+  `location` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `start_time` time NOT NULL,
@@ -31,6 +44,9 @@ CREATE TABLE IF NOT EXISTS `calendar_events` (
   `repeat` tinyint(1) NOT NULL DEFAULT '0',
   `created_by` int(10) NOT NULL,
   `created_datetime` datetime NOT NULL,
+  `sequence` int(10) NOT NULL DEFAULT '0',
+  `updated_datetime` datetime DEFAULT NULL,
+  `updated_by` int(10) DEFAULT NULL,
   PRIMARY KEY (`event_id`),
   KEY `family_id` (`family_id`),
   KEY `private` (`private`),
@@ -44,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `calendar_events` (
   KEY `repeat` (`repeat`),
   KEY `created_by` (`created_by`),
   KEY `created_datetime` (`created_datetime`),
-  FULLTEXT KEY `title_description` (`title`,`description`)
+  FULLTEXT KEY `title_description` (`title`,`description`,`location`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
@@ -462,28 +478,6 @@ CREATE TABLE IF NOT EXISTS `money_transactions` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table home_portal.money_transactions_old
-CREATE TABLE IF NOT EXISTS `money_transactions_old` (
-  `item_id` int(8) NOT NULL AUTO_INCREMENT,
-  `family_id` int(8) NOT NULL DEFAULT '1',
-  `account_id` int(8) NOT NULL,
-  `trans_type` tinyint(1) NOT NULL DEFAULT '-1',
-  `amount` float NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `date` date NOT NULL,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`item_id`),
-  KEY `account_id` (`account_id`),
-  KEY `trans_type` (`trans_type`),
-  KEY `amount` (`amount`),
-  KEY `date` (`date`),
-  KEY `family_id` (`family_id`),
-  FULLTEXT KEY `description` (`description`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- Data exporting was unselected.
-
-
 -- Dumping structure for table home_portal.notes
 CREATE TABLE IF NOT EXISTS `notes` (
   `note_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -506,19 +500,6 @@ CREATE TABLE IF NOT EXISTS `notes` (
   KEY `user_updated` (`user_updated`),
   FULLTEXT KEY `name_note` (`name`,`note`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- Data exporting was unselected.
-
-
--- Dumping structure for table home_portal.sessions
-CREATE TABLE IF NOT EXISTS `sessions` (
-  `session_id` varchar(40) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
-  `ip_address` varchar(16) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
-  `user_agent` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `last_activity` int(10) unsigned NOT NULL DEFAULT '0',
-  `user_data` text COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`session_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -627,7 +608,7 @@ CREATE TABLE `v_money_transactions` (
 	`trans_count` BIGINT(21) NOT NULL DEFAULT '0',
 	`amount` DOUBLE(19,2) NULL DEFAULT NULL,
 	`top_descriptions` VARCHAR(341) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`cat_descriptions` VARCHAR(341) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`cat_descriptions` LONGBLOB NULL DEFAULT NULL,
 	`family_id` INT(8) NOT NULL DEFAULT '1',
 	`deleted` TINYINT(1) NOT NULL DEFAULT '0',
 	`confirmed` TINYINT(1) NOT NULL DEFAULT '0'
@@ -649,6 +630,6 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `v_money
 -- Dumping structure for view home_portal.v_money_transactions
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `v_money_transactions`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `v_money_transactions` AS select `ma`.`name` AS `account_name`,`mi`.`item_id` AS `item_id`,`mi`.`account_id` AS `account_id`,`ma`.`verified` AS `account_verified`,`mi`.`trans_type` AS `trans_type`,`mi`.`date` AS `date`,count(`mt`.`transaction_id`) AS `trans_count`,round(sum(`mt`.`amount`),2) AS `amount`,group_concat(`mc2`.`description` separator ', ') AS `top_descriptions`,group_concat(`mc`.`description` separator ', ') AS `cat_descriptions`,`mi`.`family_id` AS `family_id`,`mi`.`deleted` AS `deleted`,`mi`.`confirmed` AS `confirmed` from ((((`money_transactions` `mt` join `money_items` `mi` on((`mi`.`item_id` = `mt`.`item_id`))) join `money_accounts` `ma` on((`ma`.`account_id` = `mi`.`account_id`))) join `money_catagories` `mc` on((`mt`.`category_id` = `mc`.`money_category_id`))) join `money_catagories` `mc2` on((`mc`.`parent` = `mc2`.`money_category_id`))) group by `mt`.`item_id`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `v_money_transactions` AS select `ma`.`name` AS `account_name`,`mi`.`item_id` AS `item_id`,`mi`.`account_id` AS `account_id`,`ma`.`verified` AS `account_verified`,`mi`.`trans_type` AS `trans_type`,`mi`.`date` AS `date`,count(`mt`.`transaction_id`) AS `trans_count`,round(sum(`mt`.`amount`),2) AS `amount`,group_concat(`mc2`.`description` separator ', ') AS `top_descriptions`,group_concat(concat('<a href="money/categories/stats/',`mc`.`money_category_id`,'">',`mc`.`description`,'</a>') separator ', ') AS `cat_descriptions`,`mi`.`family_id` AS `family_id`,`mi`.`deleted` AS `deleted`,`mi`.`confirmed` AS `confirmed` from ((((`money_transactions` `mt` join `money_items` `mi` on((`mi`.`item_id` = `mt`.`item_id`))) join `money_accounts` `ma` on((`ma`.`account_id` = `mi`.`account_id`))) join `money_catagories` `mc` on((`mt`.`category_id` = `mc`.`money_category_id`))) join `money_catagories` `mc2` on((`mc`.`parent` = `mc2`.`money_category_id`))) group by `mt`.`item_id`;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
