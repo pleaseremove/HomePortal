@@ -75,11 +75,11 @@ class Search_model extends CI_Model {
 																	  'calendar' AS `selection`,
 																	  '1' AS `modal`,
 																	  CONCAT('/calendar/event/',c.event_id) as `link`,
-																	  MATCH (c.title,c.description) AGAINST ('".$this->db->escape_str($search_term)."') as `score`
+																	  MATCH (c.title,c.description,c.location) AGAINST ('".$this->db->escape_str($search_term)."') as `score`
 																	FROM calendar_events AS c
 																	WHERE c.family_id = ".$this->mylogin->user()->family_id."
 																		AND (c.private = 0 OR c.created_by = ".$this->mylogin->user()->id().")
-																	  AND MATCH (c.title,c.description) AGAINST ('".$this->db->escape_str($search_term)."'))
+																	  AND MATCH (c.title,c.description,c.location) AGAINST ('".$this->db->escape_str($search_term)."'))
 																	
 																	UNION
 																	
