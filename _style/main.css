@@ -1,0 +1,62 @@
+/* Reset */
+* { margin:0; padding:0; }
+
+body,html{
+  height: 100%;
+}
+
+body{
+	background-color: #FFFFFF;
+	font-family: font-file-61702,Helvetica,Arial,sans-serif;
+	font-size: 14px;
+	color: #122333;
+}
+
+a{
+	color: #122333;
+}
+
+#search_results-resizer{
+	display: none !important;
+}
+
+#search_results .viewport {height: 100%; overflow: hidden; position: relative; }
+#search_results .overview { list-style: none; position: absolute; left: 0; top: 0; }
+#search_results .thumb .end,
+#search_results .thumb { background-color: #DADADA; border-radius: 5px 5px 5px 5px;}
+#search_results .scrollbar { position: relative; float: right; width: 8px; }
+#search_results .track { height: 100%; width:6px; position: relative; padding: 0 1px; right: -5px;}
+#search_results .thumb { height: 20px; width: 6px; cursor: pointer; overflow: hidden; position: absolute; top: 0; }
+#search_results .thumb .end { overflow: hidden; height: 5px; width: 13px; }
+#search_results .disable{ display: none; }
+
+.inline_button{
+	background-image: linear-gradient(bottom, rgb(234,238,243) 0%, rgb(250,250,252) 100%) !important;
+	background-image: -o-linear-gradient(bottom, rgb(234,238,243) 0%, rgb(250,250,252) 100%) !important;
+	background-image: -moz-linear-gradient(bottom, rgb(234,238,243) 0%, rgb(250,250,252) 100%) !important;
+	background-image: -webkit-linear-gradient(bottom, rgb(234,238,243) 0%, rgb(250,250,252) 100%) !important;
+	background-image: -ms-linear-gradient(bottom, rgb(234,238,243) 0%, rgb(250,250,252) 100%) !important;
+	
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, rgb(234,238,243)),
+		color-stop(1, rgb(250,250,252))
+	) !important;
+  background-color: #F7F7F7;
+  border: 1px solid #ccced2;
+  font-family: font-file-61706;
+  border-radius: 2px;
+  padding: 0 6px;
+  min-width: 40px;
+  display: inline-block;
+  height: 25px;
+  line-height: 24px;
+  text-align: center;
+  text-decoration: none;
+  font-size:100%;
+  color: #515862;
+  text-shadow: 0 1px 1px #FFFFFF;
+  cursor: pointer;
+}

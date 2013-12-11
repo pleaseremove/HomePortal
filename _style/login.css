@@ -1,0 +1,180 @@
+/* Massive Overrrides */
+
+* {
+	padding: 0px;
+	margin: 0px;	
+}
+
+body {
+	font-family:	Arial,Helvetica,sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #222222;
+    font-family: Helvetica,Arial,sans-serif;
+    font-weight: bold;
+}
+
+input {
+	border-radius: 4px;	
+}
+
+a,
+a:visited,
+a:link,
+a:active {
+    color: #57A000;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #000;
+}
+
+a.button, #main-content select {
+	border-radius: 4px 4px 4px 4px;	
+}
+
+a.button {
+    display: inline-block;
+    font-weight: normal;
+    height: 20px;
+    line-height: 20px;
+}
+
+
+/* Login Stuff */
+
+body#login h1 {
+	font-family: Calibri,Helvetica,Arial,sans-serif;
+	font-size: 31px;
+	font-weight: bold;
+}
+
+body#login {
+	background:url(../_images/login/bg-login.gif) repeat;
+	color:#fff;
+}
+
+body#login .wrapper {
+	background:url(../_images/login/bg-login-top.png) repeat-x;
+}
+
+body#login .login-content {
+	width:390px;
+	margin:0 auto;	
+}
+
+body#login .header {
+	padding: 140px 0px 50px 0px;	
+}
+
+body#login h1 {
+	text-align:center;
+	text-shadow: 0px 0px 5px #444;
+	color:#fff;
+}
+
+body#login input {
+  background: none repeat scroll 0 0 #FFFFFF;
+  border: 0 none;
+  float: right;
+  margin: 0 0 20px;
+  width: 250px;
+  color: #333px;
+  font-size:13px;
+  padding:6px;
+}
+
+body#login label {
+  float: left;
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  width: 100px;
+}
+
+body#login .login-content p {
+	line-height:1.6em;	
+	clear: both;
+}
+
+body#login .notification {
+  background-color: #141414;
+  border: 0 none;
+  color: #fff !important;
+}
+
+body#login .button {
+	/*margin-top: 20px;*/
+    width: auto;
+}
+
+body#login a,
+body#login a:active,
+body#login a:link,
+body#login a:visited {
+	color: #fff;
+	text-decoration:none;	
+}
+
+body#login a.smallerAction {
+	display:inline-block;
+	width:auto;
+	margin-right:20px;
+	float:right;
+	vertical-align:baseline;
+	font-size: 11px;
+	color: #ddd;
+}
+
+
+/* Toasts */
+
+.notification {
+	border-radius: 6px;
+	background-position: 10px 11px !important;
+	background-repeat: no-repeat !important;
+	font-size: 13px;
+	margin: 0 0 15px;
+	position: relative;
+	width: 99.8%;
+	border-width: 1px;
+  	border-style: solid;
+}
+
+.notification div {
+  display: block;
+  font-style: normal;
+  line-height: 1.5em;
+  padding: 10px 15px 10px 36px;
+}
+
+.information {
+    background: url("../_images/login/information.png") repeat scroll 0 0 #DBE3FF;
+    border-color: #A2B4EE;
+    color: #585B66;
+}
+
+.error {
+    background: url("../_images/login/cross_circle.png") repeat scroll 0 0 #FFCECE;
+    border-color: #DF8F8F;
+    color: #665252;
+}
+
+/* Buttons */
+
+.button {
+	background: url("../_images/login/bg-button-green.gif") repeat-x scroll left top #459300 !important;
+	border: 1px solid #459300 !important;
+	color: #FFFFFF !important;
+	cursor: pointer;
+	display: inline-block;
+	font-family: Verdana,Arial,sans-serif;
+	font-size: 11px !important;
+	padding: 4px 7px !important;
+}
+
+a.button:hover {
+	text-decoration:underline;	
+}

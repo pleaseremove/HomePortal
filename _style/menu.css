@@ -1,0 +1,83 @@
+#overview{
+  display: block;
+  height: 25px;
+  line-height: 23px;
+  font-size:120%;
+  margin-bottom: 20px;
+}
+
+#overview img {
+	vertical-align:middle;
+	margin-right: 5px;
+}
+
+#menu{
+	padding: 20px 20px 20px 10px;
+}
+
+#menu ul{
+	list-style: none;
+}
+
+#menu ul li{
+	margin-bottom: 10px;
+	margin-top: 10px;
+	font-weight: 600;
+}
+
+#menu .overview > ul > li {
+	background-position: top left;
+	background-repeat:no-repeat;
+	text-indent: 22px;	
+}
+
+#menu ul li ul{
+	margin-top: 10px;
+	padding-bottom: 10px;
+	background: url("../_images/layout/menu-sep.png") no-repeat scroll bottom center transparent;
+	text-indent: 0px;
+	width: 135px;
+	padding-left: 10px;
+}
+
+#menu ul li ul li{
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+	font-weight: 400;
+	border: 1px solid transparent;
+}
+
+#menu ul li ul li a{
+	color: #6C6C6C;
+  display: block;
+  font-size: 90%;
+  font-weight: bold;
+	padding-left: 23px;
+  letter-spacing: -0.01em;
+  line-height: 26px;
+  text-decoration: none;
+}
+
+#menu a.active {
+	background-position: 2px center;
+	background-repeat:no-repeat;	
+}
+
+#menu ul li ul li:hover{
+	background-color:#eceff3;
+	border: 1px solid #e0e9f5;
+	border-radius: 10px;
+}
+
+#menu .viewport {height: 100%; overflow: hidden; position: relative; }
+#menu .overview { list-style: none; position: absolute; left: 0; top: 0; }
+#menu .thumb .end,
+#menu .thumb { background-color: #DADADA; border-radius: 5px 5px 5px 5px;}
+#menu .scrollbar { position: relative; float: right; width: 0px; }
+#menu .track { height: 100%; width:6px; position: relative; padding: 0 1px; right: -5px;}
+#menu .thumb { height: 20px; width: 6px; cursor: pointer; overflow: hidden; position: absolute; top: 0; display: none;}
+#menu .thumb .end { overflow: hidden; height: 5px; width: 13px; }
+#menu .disable{ display: none; }
+
+#menu:hover .thumb{ display:block;}

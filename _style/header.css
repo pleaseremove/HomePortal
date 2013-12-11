@@ -1,0 +1,91 @@
+﻿#header{
+	position: relative;
+	z-index: 10 !important;
+}
+
+#logo{
+	background: url("../_images/layout/header-sep.png") no-repeat scroll right center transparent;
+  height: 50px;
+  left: 22px;
+  line-height: 50px;
+  position: absolute;
+  top: 0;
+  width: 158px;
+}
+
+#date_time{
+	position: absolute;
+	top: 15px;
+	left: 200px;
+}
+
+#header ul{
+	position: absolute;
+	right: 185px;
+	list-style: none;
+}
+
+#header ul li{
+	float: left;
+	position: relative;
+}
+
+#header ul li a, #header ul li.nolink{
+	background: url("../_images/layout/header-sep.png") no-repeat scroll left center transparent;
+	padding-left: 20px;
+  padding-right: 18px;
+	display: inline-block;
+	height: 50px;
+	line-height: 50px;
+}
+
+#header ul li:first-child a, #header ul li:first-child{
+	background: none;
+}
+
+#header li ul{
+	display: none;
+	height: auto;
+  left: 0;
+  position: absolute;
+  top: 50px;
+  width: 130px;
+  z-index: 1000;
+}
+
+#header li:hover ul{
+	display: block;
+}
+
+#header ul li ul li{
+	line-height: 35px;
+}
+
+#header ul li ul li a{
+	display: inline-block;
+	height: 35px;
+	width: 100%;
+	line-height: 35px;
+}
+
+#header form{
+	position: absolute;
+	top: 15px;
+	right: 15px;
+}
+
+#header form input{
+	width: 150px;
+}
+
+#search_close{
+	display: block;
+	background: url("../_images/layout/search-close.png") no-repeat scroll left center transparent;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	top: 3px;
+	right: 2px;
+	display: none;
+	cursor: pointer;
+}
