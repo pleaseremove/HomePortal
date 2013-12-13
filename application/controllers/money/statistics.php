@@ -18,21 +18,39 @@ class Statistics extends My_Controller {
 	function category_spending(){
 		$this->mysmarty->assign('years',$this->load->activeModelReturn('model_money_items',array(NULL,NULL,'SELECT YEAR(date) as `year` FROM money_items GROUP BY YEAR(date) ORDER BY YEAR(date)')));
 		$this->mysmarty->assign('cur_year',$this->input->post('year',date('Y')));
+		$this->mysmarty->assign('last_year',(((int) $this->input->post('year',date('Y'))-1)));
 		
 		$this->mysmarty->assign('table_data',$this->load->activeModelReturn('model_money_catagories',array(NULL,NULL,'SELECT
+			mc2.description AS "top_category",
 			mc.description AS "category",
-			ROUND(SUM(IF(MONTH(mi.date)=1,mt.amount,0)),2) AS "jan",
-			ROUND(SUM(IF(MONTH(mi.date)=2,mt.amount,0)),2) AS "feb",
-			ROUND(SUM(IF(MONTH(mi.date)=3,mt.amount,0)),2) AS "mar",
-			ROUND(SUM(IF(MONTH(mi.date)=4,mt.amount,0)),2) AS "apr",
-			ROUND(SUM(IF(MONTH(mi.date)=5,mt.amount,0)),2) AS "may",
-			ROUND(SUM(IF(MONTH(mi.date)=6,mt.amount,0)),2) AS "jun",
-			ROUND(SUM(IF(MONTH(mi.date)=7,mt.amount,0)),2) AS "jul",
-			ROUND(SUM(IF(MONTH(mi.date)=8,mt.amount,0)),2) AS "aug",
-			ROUND(SUM(IF(MONTH(mi.date)=9,mt.amount,0)),2) AS "sep",
-			ROUND(SUM(IF(MONTH(mi.date)=10,mt.amount,0)),2) AS "oct",
-			ROUND(SUM(IF(MONTH(mi.date)=11,mt.amount,0)),2) AS "nov",
-			ROUND(SUM(IF(MONTH(mi.date)=12,mt.amount,0)),2) AS "dec"
+			ROUND(SUM(IF(MONTH(mi.date)=1 AND YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "jan",
+			ROUND(SUM(IF(MONTH(mi.date)=2 AND YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "feb",
+			ROUND(SUM(IF(MONTH(mi.date)=3 AND YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "mar",
+			ROUND(SUM(IF(MONTH(mi.date)=4 AND YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "apr",
+			ROUND(SUM(IF(MONTH(mi.date)=5 AND YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "may",
+			ROUND(SUM(IF(MONTH(mi.date)=6 AND YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "jun",
+			ROUND(SUM(IF(MONTH(mi.date)=7 AND YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "jul",
+			ROUND(SUM(IF(MONTH(mi.date)=8 AND YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "aug",
+			ROUND(SUM(IF(MONTH(mi.date)=9 AND YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "sep",
+			ROUND(SUM(IF(MONTH(mi.date)=10 AND YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "oct",
+			ROUND(SUM(IF(MONTH(mi.date)=11 AND YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "nov",
+			ROUND(SUM(IF(MONTH(mi.date)=12 AND YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "dec",
+			
+			ROUND(SUM(IF(MONTH(mi.date)=1 AND YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "jan1",
+			ROUND(SUM(IF(MONTH(mi.date)=2 AND YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "feb1",
+			ROUND(SUM(IF(MONTH(mi.date)=3 AND YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "mar1",
+			ROUND(SUM(IF(MONTH(mi.date)=4 AND YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "apr1",
+			ROUND(SUM(IF(MONTH(mi.date)=5 AND YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "may1",
+			ROUND(SUM(IF(MONTH(mi.date)=6 AND YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "jun1",
+			ROUND(SUM(IF(MONTH(mi.date)=7 AND YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "jul1",
+			ROUND(SUM(IF(MONTH(mi.date)=8 AND YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "aug1",
+			ROUND(SUM(IF(MONTH(mi.date)=9 AND YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "sep1",
+			ROUND(SUM(IF(MONTH(mi.date)=10 AND YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "oct1",
+			ROUND(SUM(IF(MONTH(mi.date)=11 AND YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "nov1",
+			ROUND(SUM(IF(MONTH(mi.date)=12 AND YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "dec1",
+			
+			ROUND(SUM(IF(YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "total_this",
+			ROUND(SUM(IF(YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "total_last"
 		FROM money_transactions AS mt
 		JOIN money_items AS mi
 			ON mt.item_id = mi.item_id
@@ -44,9 +62,9 @@ class Statistics extends My_Controller {
 			AND mi.trans_type = -1
 			AND mi.family_id = '.$this->mylogin->user()->family_id.'
 			AND mi.deleted = 0
-			AND YEAR(mi.date) = '.$this->input->post('year',date('Y')).'
+			AND YEAR(mi.date) IN('.$this->input->post('year',date('Y')).','.($this->input->post('year',date('Y'))-1).')
 		GROUP BY mc.money_category_id
-		ORDER BY mc.description')));
+		ORDER BY mc2.description, mc.description')));
 		
 		
 		$this->json->setData($this->mysmarty->view('money/statistics/category_spending',false,true));
