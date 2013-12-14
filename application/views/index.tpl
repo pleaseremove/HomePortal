@@ -25,17 +25,12 @@
 		<link rel="stylesheet" title="default" type="text/css" media="screen" href="_style/libs/jqplot1.0.8r1250/jquery.jqplot.min.css" />
 		
 		<!-- Javascript Libs-->
-		{*<script src="_js/libs/jquery-1.7.2.min.js" type="text/javascript"></script>*}
-		{*<script src="_js/libs/jquery-1.9.1.min.js" type="text/javascript"></script>*}
 		<script src="_js/libs/jquery-1.10.1.min.js" type="text/javascript"></script>
 		
-		{*<script src="_js/libs/jquery-ui-1.8.21.custom.min.js" type="text/javascript"></script>*}
 		<script src="_js/libs/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
-		
-		{*<script src="_js/libs/jquery.layout-1.3.0.rc30.51.js" type="text/javascript"></script>*}
+
 		<script src="_js/libs/jquery.layout-1.3.0.rc30.79.js" type="text/javascript"></script>
 		
-		{*<script src="_js/libs/jquery.jgrowl_minimized.js" type="text/javascript"></script>*}
 		<script src="_js/libs/jquery.jgrowl.min.js" type="text/javascript"></script>
 		
 		<script src="_js/libs/jquery-ui-timepicker-addon.min.js" type="text/javascript"></script>
