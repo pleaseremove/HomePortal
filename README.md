@@ -7,4 +7,4 @@ While I have been running it in one form or another for a number of years this i
 
 Any feedback, bug reports and feature requests are more than welcome, although don't get your hopes up.
 
-At this point the code is provided as is on the condition that it is only used for personnel use and any changes are push back to the community.
+At this point the code is provided as is on the condition that it is only used for personal use and any changes are push back to the community.
