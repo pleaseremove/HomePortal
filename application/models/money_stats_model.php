@@ -274,7 +274,7 @@ class Money_stats_model extends CI_Model {
 				ksort($month_data);
 				foreach($month_data as $day => $amount){
 					$balance = $balance+$amount;
-					if(date('U',strtotime($year.'-'.$month.'-'.$day.' 23:59:59')) < date('U')){
+					if(date('U',strtotime($year.'-'.$month.'-'.$day.' 23:59:59')) <= date('U',strtotime(date('Y-m-d').' 23:59:59'))){
 						$new_data[$year.'-'.$month.'-'.$day] = round($balance,2);
 					}
 				}
