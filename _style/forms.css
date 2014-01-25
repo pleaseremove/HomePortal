@@ -6,6 +6,11 @@ input, select, textarea, button, ul.multiselect{
   padding: 2px 5px;
 }
 
+
+ul.multiselect li {
+   height: 20px;
+}
+
 ul.multiselect input{
   float: left;
   height: 16px;

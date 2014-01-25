@@ -15,6 +15,7 @@ class model_calendar_events extends ActiveRecord {
 			  'c' as event_type,
 			  all_day,
 			  IF(important=1,'event_important','event_normal') as event_class,
+			  tentative,
 			  day(start_date) as `day`
 			FROM calendar_events
 			WHERE ((start_date >= FROM_UNIXTIME(".$start_unix.") AND end_date <= FROM_UNIXTIME(".$end_unix."))
@@ -63,6 +64,7 @@ class model_calendar_events extends ActiveRecord {
 		   'b' as event_type,
 		   '1' as all_day,
 		   'event_birthday' as event_class,
+		   '0' AS tentative,
 	     day(birthday) as `day`
 		 FROM contacts_main
 		 WHERE
@@ -118,6 +120,7 @@ class model_calendar_events extends ActiveRecord {
 		   'b' as event_type,
 		   '1' as all_day,
 		   'event_birthday' as event_class,
+		   '0' AS tentative,
 	     day(cc.birthday) as `day`
 		 FROM contacts_children AS cc
 		 JOIN contacts_main AS cm
@@ -175,6 +178,7 @@ class model_calendar_events extends ActiveRecord {
 		    'a' as event_type,
 		    '1' as all_day,
 		    'event_aniversary' as event_class,
+		    '0' AS tentative,
 		    day(aniversary) as `day`
 		  FROM contacts_main
 		  WHERE
@@ -202,6 +206,7 @@ class model_calendar_events extends ActiveRecord {
 				  't' as event_type,
 				  '1' as all_day,
 				  'event_task' as event_class,
+				  '0' AS tentative,
 				  day(date_due) as `day`
 				 FROM tasks
 				 WHERE

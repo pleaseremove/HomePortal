@@ -22,7 +22,7 @@ class Calendar extends My_Controller {
 				'allDay' => ($event->all_day==1 ? true : false),
 				'eventType' => $event->event_type,
 				'editable' => (($event->event_type=='b' || $event->event_type=='a') ? false : true),
-				'className' => $event->event_class
+				'className' => $event->event_class.($event->tentative==1 ? ' event_tentative' : '')
 			);
 		}
 		
@@ -50,6 +50,7 @@ class Calendar extends My_Controller {
 			$this->event->title = $this->input->post('title','');
 			$this->event->description = $this->input->post('description','');
 			$this->event->location = $this->input->post('location',NULL);
+			$this->event->tentative = $this->input->post('tentative',0);
 			$this->event->repeat = $this->input->post('repeat',0);
 			if($this->input->post('start_time','00:00')!='00:00' || $this->input->post('end_time','00:00')!='00:00'){
 				$this->event->all_day = 0;
@@ -106,7 +107,7 @@ class Calendar extends My_Controller {
 			$event->date_due = $start_date.' '.$start_time;
 		}elseif($type=='c'){
 			$event = $this->load->activeModelReturn('model_calendar_events',array($id));
-			$event->all_day = ($this->input->post('all_day') ? 1 : 0);
+			$event->all_day = $this->input->post('all_day',1);
 			$event->start_date = $start_date;
 			$event->end_date = $end_date;
 			$event->start_time = $start_time;

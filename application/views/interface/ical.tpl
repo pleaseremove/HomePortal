@@ -16,6 +16,7 @@ DTSTAMP:{$e->created_datetime|date_format:'%Y%m%dT%H%M%SZ'}
 DESCRIPTION:{$e->escapeStringIcal($e->details)}
 SUMMARY:{$e->escapeStringIcal($e->title)}
 LAST-MODIFIED:{$e->updated_datetime|date_format:'%Y%m%dT%H%M%SZ'}
+STATUS:{if $e->tentative==1}TENTATIVE{else}CONFIRMED{/if}
 LOCATION:{$e->location|default:''}
 SEQUENCE:{$e->sequence|default:'0'}
 END:VEVENT

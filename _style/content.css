@@ -92,6 +92,13 @@ p.money_stat > span {
   overflow-y: auto;
 }
 
+@media all and (min-width: 1001px) {
+ #content{
+	overflow-x: auto;
+  overflow-y: auto;
+}
+}
+
 #content.spacing{
 	padding: 10px;
 }
@@ -365,6 +372,10 @@ table.data_grid tfoot tr {
 	background-color: #5FB2ED;
   border-color: #5FB2ED;
   color: #FFFFFF !important;
+}
+
+#content .fc-event.event_tentative{
+	background-image: url('../_images/calendar_event_tentative.png');
 }
 
 .widget{
