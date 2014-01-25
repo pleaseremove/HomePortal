@@ -94,7 +94,7 @@ $(function() {
     				revertFunc();
             $.system.message('Event failed to update, please try again','error');
     			}
-    		},"start="+event.start.toUTCString()+"&end="+date_end+"&id="+event.id+"&all_day="+event.allDay);
+    		},"start="+event.start.toUTCString()+"&end="+date_end+"&id="+event.id+"&all_day="+(event.allDay ? 1 : 0));
 			}else{
 				revertFunc();
 			}
@@ -112,7 +112,7 @@ $(function() {
     				revertFunc();
             $.system.message('Event failed to update, please try again','error');
     			}
-    		},"start="+event.start.toUTCString()+"&end="+date_end+"&id="+event.id+"&all_day="+event.allDay);
+    		},"start="+event.start.toUTCString()+"&end="+date_end+"&id="+event.id+"&all_day="+(event.allDay ? 1 : 0));
 			}else{
 				revertFunc();
 			}
