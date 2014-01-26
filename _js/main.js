@@ -263,10 +263,12 @@ $(function() {
   
   $(document).on('submit','form:not(#header_search)',function(event){
   	event.preventDefault();
-  	$.system.get_json($(this).attr('action'),function(return_html){
-  		$('#main').html(return_html);
-  		$.system.resize_all();
-  	},$(this).serialize());
+  	$.system.submit_form($(this),function(return_info){
+			$.system.ajax_complete(return_info,function(return_html){
+				$('#main').html(return_html);
+				$.system.resize_all();
+			});
+		});			
   });
   
   $('#header_search').bind('submit',function(event){
