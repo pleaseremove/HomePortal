@@ -27,6 +27,14 @@
             <li><a href="/mobile/notes/" data-transition="none"{if $section=='notes'} class="ui-btn-active ui-state-persist"{/if}>Notes</a></li>
           </ul>
         </div>
+        {if $section=='money'}
+	        <div data-role="navbar" data-iconpos="top">
+	        	<ul>
+	        		<li><a href="/mobile/money/edit/0/" data-transition="none" data-theme="a">New Transaction</a></li>
+	            <li><a href="/mobile/money/all/" data-transition="none" data-theme="a">Transactions</a></li>
+	          </ul>
+	        </div>
+	       {/if}
       </div>
       
       <div data-role="content" style="padding: 15px">

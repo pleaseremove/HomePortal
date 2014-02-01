@@ -12,6 +12,14 @@ class money extends MyM_Controller {
 		$this->mysmarty->view('mobile/money/index');
 	}
 	
+	function all(){
+		$this->mysmarty->assign('page_title','Money: All');
+		$this->mysmarty->assign('transactions',$this->load->activeModelReturn('model_money_transactions',array(NULL,NULL,'SELECT v_money_transactions.* FROM v_money_transactions JOIN money_transactions ON v_money_transactions.item_id = money_transactions.item_id '.
+			$this->filters(true).' GROUP BY v_money_transactions.item_id '.$this->order_by('date DESC, item_id DESC').$this->limit_by()
+		)));
+		$this->mysmarty->view('mobile/money/transactions');
+	}
+	
 	function edit($id=0){
 		$this->mysmarty->assign('accounts',$this->load->activeModelReturn('model_money_accounts',array(NULL,'WHERE family_id = '.$this->mylogin->user()->family_id.' ORDER BY name ASC')));
 		$this->mysmarty->assign('categories',$this->load->activeModelReturn('model_money_catagories',array(NULL,NULL,'SELECT jc.description as description, jc.money_category_id as id, c.description as parent FROM money_catagories AS c RIGHT JOIN money_catagories AS jc ON c.money_category_id = jc.parent WHERE jc.parent <> 0 AND c.family_id = '.$this->mylogin->user()->family_id.' ORDER BY c.description, jc.description')));
