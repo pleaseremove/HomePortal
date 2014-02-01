@@ -82,18 +82,18 @@
 					{assign var='total_this' value=$total_this+$a->total_this}
 					<tr>
 						 <td>{$a->category}</td>
-						 <td title="Previous Year: {$a->jan1}">{$a->jan}</td>
-						 <td title="Previous Year: {$a->feb1}">{$a->feb}</td>
-						 <td title="Previous Year: {$a->mar1}">{$a->mar}</td>
-						 <td title="Previous Year: {$a->apr1}">{$a->apr}</td>
-						 <td title="Previous Year: {$a->may1}">{$a->may}</td>
-						 <td title="Previous Year: {$a->jun1}">{$a->jun}</td>
-						 <td title="Previous Year: {$a->jul1}">{$a->jul}</td>
-						 <td title="Previous Year: {$a->aug1}">{$a->aug}</td>
-						 <td title="Previous Year: {$a->sep1}">{$a->sep}</td>
-						 <td title="Previous Year: {$a->oct1}">{$a->oct}</td>
-						 <td title="Previous Year: {$a->nov1}">{$a->nov}</td>
-						 <td title="Previous Year: {$a->dec1}">{$a->dec}</td>
+						 <td title="Previous Year: {$a->jan1|number_format:2:".":","}">{$a->jan|number_format:2:".":","}</td>
+						 <td title="Previous Year: {$a->feb1|number_format:2:".":","}">{$a->feb|number_format:2:".":","}</td>
+						 <td title="Previous Year: {$a->mar1|number_format:2:".":","}">{$a->mar|number_format:2:".":","}</td>
+						 <td title="Previous Year: {$a->apr1|number_format:2:".":","}">{$a->apr|number_format:2:".":","}</td>
+						 <td title="Previous Year: {$a->may1|number_format:2:".":","}">{$a->may|number_format:2:".":","}</td>
+						 <td title="Previous Year: {$a->jun1|number_format:2:".":","}">{$a->jun|number_format:2:".":","}</td>
+						 <td title="Previous Year: {$a->jul1|number_format:2:".":","}">{$a->jul|number_format:2:".":","}</td>
+						 <td title="Previous Year: {$a->aug1|number_format:2:".":","}">{$a->aug|number_format:2:".":","}</td>
+						 <td title="Previous Year: {$a->sep1|number_format:2:".":","}">{$a->sep|number_format:2:".":","}</td>
+						 <td title="Previous Year: {$a->oct1|number_format:2:".":","}">{$a->oct|number_format:2:".":","}</td>
+						 <td title="Previous Year: {$a->nov1|number_format:2:".":","}">{$a->nov|number_format:2:".":","}</td>
+						 <td title="Previous Year: {$a->dec1|number_format:2:".":","}">{$a->dec|number_format:2:".":","}</td>
 						 <td style="color:{if $a->total_last>$a->total_this}red{else}green{/if}">{$a->total_last}</td>
 						 <td style="color:{if $a->total_last>$a->total_this}green{else}red{/if}">{$a->total_this}</td>
 					</tr>
@@ -105,18 +105,18 @@
 				<tfoot>
 					<tr>
 						 <td>Totals</td>
-						 <td>{$total_jan}</td>
-						 <td>{$total_feb}</td>
-						 <td>{$total_mar}</td>
-						 <td>{$total_apr}</td>
-						 <td>{$total_may}</td>
-						 <td>{$total_jun}</td>
-						 <td>{$total_jul}</td>
-						 <td>{$total_aug}</td>
-						 <td>{$total_sep}</td>
-						 <td>{$total_oct}</td>
-						 <td>{$total_nov}</td>
-						 <td>{$total_dec}</td>
+						 <td>{$total_jan|number_format:2:".":","}</td>
+						 <td>{$total_feb|number_format:2:".":","}</td>
+						 <td>{$total_mar|number_format:2:".":","}</td>
+						 <td>{$total_apr|number_format:2:".":","}</td>
+						 <td>{$total_may|number_format:2:".":","}</td>
+						 <td>{$total_jun|number_format:2:".":","}</td>
+						 <td>{$total_jul|number_format:2:".":","}</td>
+						 <td>{$total_aug|number_format:2:".":","}</td>
+						 <td>{$total_sep|number_format:2:".":","}</td>
+						 <td>{$total_oct|number_format:2:".":","}</td>
+						 <td>{$total_nov|number_format:2:".":","}</td>
+						 <td>{$total_dec|number_format:2:".":","}</td>
 						 <td style="color:{if $total_last>$total_this}red{else}green{/if}">{$total_last}</td>
 						 <td style="color:{if $total_last>$total_this}green{else}red{/if}">{$total_this}</td>
 					</tr>

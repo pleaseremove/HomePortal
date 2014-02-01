@@ -19,16 +19,16 @@
 					{assign var='total_diff' value=$total_diff+$a.diff}
 					<tr title="{$a.description}">
 						 <td>{$a.name}</td>
-						 <td style="color:{if $a.diff<0}red{else}green{/if}">{$a.diff}</td>
-						 <td style="color:{if $a.this_month<0}red{else}green{/if}">{$a.this_month}</td>
+						 <td style="color:{if $a.diff<0}red{else}green{/if}">{$a.diff|number_format:2:".":","}</td>
+						 <td style="color:{if $a.this_month<0}red{else}green{/if}">{$a.this_month|number_format:2:".":","}</td>
 					</tr>
 				{/foreach}
 			</tbody>
 			<tfoot>
 				<tr>
 					<td>Total</td>
-					<td style="color:{if $total_diff<0}red{else}green{/if}">{$total_diff|string_format:'%01.2f'}</td>
-					<td style="color:{if $total_balance<0}red{else}green{/if}">{$total_balance|string_format:'%01.2f'}</td>
+					<td style="color:{if $total_diff<0}red{else}green{/if}">{$total_diff|number_format:2:".":","}</td>
+					<td style="color:{if $total_balance<0}red{else}green{/if}">{$total_balance|number_format:2:".":","}</td>
 				</tr>
 			</tfoot>
 		</table>
