@@ -5,6 +5,7 @@ class Statistics extends My_Controller {
 	function index(){
 		$this->mysmarty->assign('cur_month',date('n'));
 		$this->mysmarty->assign('cur_year',date('Y'));
+		$this->mysmarty->assign('year_set',$this->load->activeModelReturn('model_money_items',array(NULL,NULL,'SELECT YEAR(date) as `year` FROM money_items GROUP BY YEAR(date) ORDER BY YEAR(date)')));
 		$this->json->setData($this->mysmarty->view('money/statistics/index',false,true));
 		$this->json->outputData();
 	}

@@ -7,9 +7,9 @@
 		<p style="margin: 10px 2%;">
 			<label>Year</label>
 			<select name="year">
-				<option value="2014"{if $smarty.post.year==2014 || ($cur_year==2014 && !$smarty.post.year)} selected="selected"{/if}>2014</option>
-				<option value="2013"{if $smarty.post.year==2013 || ($cur_year==2013 && !$smarty.post.year)} selected="selected"{/if}>2013</option>
-				<option value="2012"{if $smarty.post.year==2012 || ($cur_year==2012 && !$smarty.post.year)} selected="selected"{/if}>2012</option>
+				{foreach from=$year_set item=y}
+					<option value="{$y->year}"{if $smarty.post.year==$y->year || ($cur_year==$y->year && !$smarty.post.year)} selected="selected"{/if}>{$y->year}</option>
+				{/foreach}
 			</select>
 			<label>Month</label>
 			<select name="month">
