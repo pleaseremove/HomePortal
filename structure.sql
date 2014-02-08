@@ -633,3 +633,38 @@ DROP TABLE IF EXISTS `v_money_transactions`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `v_money_transactions` AS select `ma`.`name` AS `account_name`,`mi`.`item_id` AS `item_id`,`mi`.`account_id` AS `account_id`,`ma`.`verified` AS `account_verified`,`mi`.`trans_type` AS `trans_type`,`mi`.`date` AS `date`,count(`mt`.`transaction_id`) AS `trans_count`,round(sum(`mt`.`amount`),2) AS `amount`,group_concat(`mc2`.`description` separator ', ') AS `top_descriptions`,group_concat(concat('<a href="money/categories/stats/',`mc`.`money_category_id`,'">',`mc`.`description`,'</a>') separator ', ') AS `cat_descriptions`,`mi`.`family_id` AS `family_id`,`mi`.`deleted` AS `deleted`,`mi`.`confirmed` AS `confirmed` from ((((`money_transactions` `mt` join `money_items` `mi` on((`mi`.`item_id` = `mt`.`item_id`))) join `money_accounts` `ma` on((`ma`.`account_id` = `mi`.`account_id`))) join `money_catagories` `mc` on((`mt`.`category_id` = `mc`.`money_category_id`))) join `money_catagories` `mc2` on((`mc`.`parent` = `mc2`.`money_category_id`))) group by `mt`.`item_id`;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Home Phone', '<%data%>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Mobile Phone', '<%data%>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Livejournal', '<a class="new_window" href="http://<%data%>.livejournal.com" title="Journal for <%data%>">LiveJournal: <%data%></a>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Facebook', '<a class="new_window" href="http://www.facebook.com/profile.php?id=<%data%>">Facebook Profile</a>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Work Phone', '<%data%>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Fax Number', '<%data%>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Skype', '<a class="click-through" href="skype:<%data%>">Call: <%data%></a>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Website', '<a class="new_window" href="http://<%data%>"><%data%></a>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'MSN', '<%data%>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Yahoo', '<%data%>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Twitter', '<a class="new_window" href="https://twitter.com/<%data%>">#<%data%></a>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'LinkedIn', '<%data%>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Steam', '<%data%>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Youtube', '<%data%>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Flickr', '<%data%>', 0);
+INSERT INTO `contacts_data_types` VALUES (NULL, 'Google Plus', '<%data%>', 0);
+
+INSERT INTO `contacts_titles` VALUES (NULL, 'Mr');
+INSERT INTO `contacts_titles` VALUES (NULL, 'Mrs');
+INSERT INTO `contacts_titles` VALUES (NULL, 'Miss');
+INSERT INTO `contacts_titles` VALUES (NULL, 'Master');
+INSERT INTO `contacts_titles` VALUES (NULL, 'Rev');
+INSERT INTO `contacts_titles` VALUES (NULL, 'Lord');
+INSERT INTO `contacts_titles` VALUES (NULL, 'Dr');
+INSERT INTO `contacts_titles` VALUES (NULL, 'Ms');
+INSERT INTO `contacts_titles` VALUES (NULL, 'Lady');
+INSERT INTO `contacts_titles` VALUES (NULL, 'Baron');
+INSERT INTO `contacts_titles` VALUES (NULL, 'Baroness');
+
+INSERT INTO `families` VALUES (NULL, 'main', 'main');
+
+INSERT INTO `users` VALUES (NULL, 1, 'admin', 'Admin User', 'e6756d6510157444f7fcffd36537a972821ffb3e', 'qyEdpxtjXW', '2010-12-24 03:27:38', '2010-12-24 06:21:06', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default', 1, NULL, 0, NULL, 10, 0);
+
+
