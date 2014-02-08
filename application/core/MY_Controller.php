@@ -7,7 +7,7 @@ class My_Controller extends CI_Controller {
 		
 		$this->load->library('user_agent');
 		if($this->agent->is_mobile()){
-			//redirect('/mobile');
+			redirect('/mobile');
 		}
 
 		$this->load->library('json');
@@ -107,6 +107,18 @@ class MyM_Controller extends CI_Controller {
 		
 		$this->mysmarty->set_wrapper('mobile/index');
 		$this->mysmarty->assignByRef('currentuser',$this->mylogin->user());
+	}
+	
+	public function filters($include_where=false,$family_prefix=false,$extra_data=array()){
+		return My_Controller::filters($include_where,$family_prefix,$extra_data);
+	}
+	
+	public function order_by($order_by=''){
+		return My_Controller::order_by($order_by);
+	}
+	
+	public function limit_by($start=0,$count=100){
+		return My_Controller::limit_by($start,$count);
 	}
 }
 
