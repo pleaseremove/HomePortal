@@ -1,6 +1,12 @@
 #ignore thumbnails created by windows
 Thumbs.db
-/_images/*.jpg
+/_images/contact_photos/*.jpg
 /resources
 /application/logs/*.php
 /system/cache/*
+.gitignore
+Statement Download *.csv
+Statement Download *.ofx
+.memdump
+.gitignore
+.gitignore

@@ -7,15 +7,17 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 		<title>HomePortal</title>
 		<link rel="stylesheet" href="/_style/mobile/my.css" />
-		<link rel="stylesheet" href="/_js/mobile/jquery.mobile-1.3.1.min.css" />
+		<link rel="stylesheet" href="/_js/mobile/jquery.mobile-1.4.1.min.css" />
+		<link rel="stylesheet" href="/_js/mobile/jquery.mobile.theme-1.4.1.min.css" />
 		<script src="/_js/libs/jquery-1.10.1.min.js"></script>
-		<script src="/_js/mobile/jquery.mobile-1.3.1.min.js"></script>
-		<script src="/_js/mobile/my.js"></script>
+		<script src="/_js/mobile/jquery.mobile-1.4.1.min.js"></script>
+		{*<script src="/_js/mobile/my.js"></script>*}
 	</head>
 	<body>
     <!-- Home -->
     <div data-role="page" id="contacts-page">
-      <div data-theme="a" data-role="header" data-position="fixed">
+      <div data-theme="b" data-role="header" data-position="fixed">
+      	<a href="/mobile/" class="ui-btn-left">Home</a>
         <h1>{$page_title}</h1>
         <a href="/mobile/logout" class="ui-btn-right">Logout</a>
         <div data-role="navbar" data-iconpos="top">
