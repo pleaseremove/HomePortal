@@ -1,4 +1,4 @@
-<a href="/mobile/events/new_event/" data-role="button" data-theme="a" data-icon="plus">New Event</a>
+<a href="/mobile/events/edit/0" data-role="button" data-theme="a" data-icon="plus">New Event</a>
 
 <div data-role="navbar">
 	<ul>

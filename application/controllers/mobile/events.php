@@ -91,7 +91,8 @@ class events extends MyM_Controller {
 	}
 	
 	function edit($event_id=0){
-		$this->load->activeModel('model_calendar_events','event',array(substr($event_id,1)));
+		$event_id = (!is_numeric($event_id) ? substr($event_id,1) : $event_id);
+		$this->load->activeModel('model_calendar_events','event',array($event_id));
 		$this->mysmarty->view('mobile/events/view');
 	}
 	
@@ -102,9 +103,26 @@ class events extends MyM_Controller {
 		$this->event->start_date = $this->input->post('start_date',NULL);
 		$this->event->end_date = $this->input->post('end_date',NULL);
 		
+		$this->event->start_time = $this->input->post('start_time','00:00');
+		$this->event->end_time = $this->input->post('end_time','00:00');
+		
 		$this->event->important = $this->input->post('important',0);
 		$this->event->private = $this->input->post('private',0);
-		$this->event->add_day = $this->input->post('add_day',1);
+		$this->event->all_day = $this->input->post('all_day',1);
+		$this->event->tentative = $this->input->post('tentative',0);
+		$this->event->repeat = $this->input->post('repeat',0);
+		
+		$this->event->updated_by = $this->mylogin->user()->id();
+		$this->event->updated_datetime = date('Y-m-d H:i:s');
+		
+		if($this->event->isNew()){
+			$this->event->family_id = $this->mylogin->user()->family_id;
+			$this->event->created_by = $this->mylogin->user()->id();
+			$this->event->created_datetime = date('Y-m-d H:i:s');
+			$this->event->sequence = 0;
+		}else{
+			$this->event->sequence = $this->event->sequence+1;
+		}
 		
 		$this->event->save();
 		

@@ -2,7 +2,7 @@
 
 		<div data-role="fieldcontain">
 			<label for="date">Date:</label>
-			<input type="text" name="date" id="date" value="{$t->date|default:$smarty.now|date_format:'%Y-%m-%d'}" />
+			<input type="date" name="date" id="date" value="{$t->date|default:$smarty.now|date_format:'%Y-%m-%d'}" />
 		</div>
 		
 		<div data-role="fieldcontain">
@@ -39,7 +39,7 @@
 		
 		<div data-role="fieldcontain">
 			<label for="amount">Amount:</label>
-			<input type="text" name="amount" id="amount" value="{$t->amount}" />
+			<input type="number" name="amount" id="amount" value="{$t->amount}" />
 		</div>
 		
 		<div data-role="fieldcontain">

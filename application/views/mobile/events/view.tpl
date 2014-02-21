@@ -1,7 +1,7 @@
 <form method="post" action="/mobile/events/save">
 		<div data-role="fieldcontain">
 			<label for="title">Name:</label>
-			<input type="text" name="name" id="title" value="{$ci->event->title}" />
+			<input type="text" name="title" id="title" value="{$ci->event->title}" />
 		</div>
 		
 		<div data-role="fieldcontain">
@@ -11,12 +11,12 @@
 		
 		<div data-role="fieldcontain">
 			<label for="start_date">Start Date:</label>
-			<input type="text" name="start_date" id="title" value="{$ci->event->start_date}" />
+			<input type="date" name="start_date" id="start_date" value="{$ci->event->start_date}" />
 		</div>
 		
 		<div data-role="fieldcontain">
 			<label for="end_date">End Date:</label>
-			<input type="text" name="end_date" id="title" value="{$ci->event->end_date}" />
+			<input type="date" name="end_date" id="end_date" value="{$ci->event->end_date}" />
 		</div>
 		
 		<div data-role="fieldcontain">
@@ -25,6 +25,16 @@
 				<option value="0" {if isset($ci->event->all_day) && $ci->event->all_day==0} selected="selected"{/if}>No</option>
 				<option value="1" {if isset($ci->event->all_day) && $ci->event->all_day==1} selected="selected"{/if}>Yes</option>
 			</select>
+		</div>
+		
+		<div data-role="fieldcontain">
+			<label for="start_time">Start Time:</label>
+			<input type="time" name="start_time" id="start_time" value="{$ci->event->start_time}" />
+		</div>
+		
+		<div data-role="fieldcontain">
+			<label for="end_time">End Time:</label>
+			<input type="time" name="end_time" id="end_time" value="{$ci->event->end_time}" />
 		</div>
 		
 		<div data-role="fieldcontain">
@@ -47,3 +57,34 @@
 		<input type="submit" value="Save" />
 	</form>
 </div>
+
+<script type="text/javascript">
+	$(function(){
+		
+		$('select[name=all_day]').bind('change',function(){
+			if($(this).val()==1){
+				$('input[name=start_time]').parent().parent().hide();
+				$('input[name=end_time]').parent().parent().hide();
+			}else{
+				$('input[name=start_time]').parent().parent().show();
+				$('input[name=end_time]').parent().parent().show();
+			}
+		});
+		
+		$('input[name=start_date]').bind('blur',function(){
+			$('input[name=end_date]').val($(this).val());
+		});
+		
+		$('input[name=start_time]').bind('blur',function(){
+			$('input[name=end_time]').val($(this).val());
+		});
+		
+		if($('select[name=all_day]').val()==1){
+			$('input[name=start_time]').parent().parent().hide();
+			$('input[name=end_time]').parent().parent().hide();
+		}else{
+			$('input[name=start_time]').parent().parent().show();
+			$('input[name=end_time]').parent().parent().show();
+		}
+	});
+</script>
