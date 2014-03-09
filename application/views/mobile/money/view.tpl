@@ -39,12 +39,12 @@
 		
 		<div data-role="fieldcontain">
 			<label for="amount">Amount:</label>
-			<input type="number" name="amount" id="amount" value="{$t->amount}" />
+			<input type="number" name="amount" id="amount" autocomplete="off" value="{$t->amount}" />
 		</div>
 		
 		<div data-role="fieldcontain">
 			<label for="name">Description:</label>
-			<textarea name="description" id="description">{$t->description}</textarea>
+			<textarea name="description" id="description" autocomplete="off">{$t->description}</textarea>
 		</div>
 		
 		<input type="hidden" value="{$t->id()}" name="trans_id" />
