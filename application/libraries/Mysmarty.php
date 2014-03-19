@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-require "Smarty-3.1.8/libs/Smarty.class.php";
+require "Smarty-3.1.17/libs/Smarty.class.php";
 
 /**
 * @file system/application/libraries/Mysmarty.php
