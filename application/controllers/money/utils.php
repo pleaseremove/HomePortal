@@ -8,8 +8,12 @@ class Utils extends My_Controller {
 	var $too_many = array();
 	var $day_slip = 4;
 	var $account_id = 1;
+	var $csv_last_date = '2014-01-25';
 
 	function index(){
+		//list accounts for import script
+		$this->mysmarty->assign('accounts',$this->load->activeModelReturn('model_money_accounts',array(NULL,'WHERE family_id = '.$this->mylogin->user()->family_id.' ORDER BY name ASC')));
+		
 		$this->json->setData($this->mysmarty->view('money/utils/index.tpl',false,true));
 		$this->json->outputData();
 	}
@@ -131,7 +135,7 @@ class Utils extends My_Controller {
 	}
 
 	function verify(){
-		$csv_data = file_get_contents('Statement Download 2013-Dec-11 1-02-33.csv');
+		$csv_data = file_get_contents('Statement Download 2014-Feb-25 21-40-25.csv');
 		$csv_array = explode("\n",$csv_data);
 		
 		//"Date","Transaction type","Description","Paid out","Paid in","Balance"
@@ -151,11 +155,11 @@ class Utils extends My_Controller {
 					$this->types[] = $type;
 				}
 				
-				if($debit!=''){
+				//plus and minus the date by a few days
+				$start_date = date("Y-m-d",strtotime(date("Y-m-d",$date) . ' -'.$this->day_slip.' day'));
+				$end_date = date("Y-m-d",strtotime(date("Y-m-d",$date) . ' +'.$this->day_slip.' day'));
 				
-					//plus and minus the date by a few days
-					$start_date = date("Y-m-d",strtotime(date("Y-m-d",$date) . ' -'.$this->day_slip.' day'));
-					$end_date = date("Y-m-d",strtotime(date("Y-m-d",$date) . ' +'.$this->day_slip.' day'));
+				if($debit!=''){
 					
 					$search = $this->db->query('SELECT * FROM v_money_transactions WHERE deleted = 0 AND `date` BETWEEN "'.$start_date.'" AND "'.$end_date.'" AND trans_type = -1 AND account_id = '.$this->account_id.' AND amount = "'.$debit.'" AND confirmed = 0');
 					
@@ -169,10 +173,7 @@ class Utils extends My_Controller {
 						$this->too_many[] = $search->result_array();
 					}
 				}elseif($credit!=''){
-					//plus and minus the date by a few days
-					$start_date = date("Y-m-d",strtotime(date("Y-m-d",$date) . ' -'.$this->day_slip.' day'));
-					$end_date = date("Y-m-d",strtotime(date("Y-m-d",$date) . ' +'.$this->day_slip.' day'));
-					
+
 					$search = $this->db->query('SELECT * FROM v_money_transactions WHERE deleted = 0 AND `date` BETWEEN "'.$start_date.'" AND "'.$end_date.'" AND trans_type = 1 AND account_id = '.$this->account_id.' AND amount = "'.$credit.'" AND confirmed = 0');
 					
 					if($search->num_rows()==1){
@@ -190,7 +191,7 @@ class Utils extends My_Controller {
 		}
 		
 		if(count($this->found_rows) > 0){
-			$in_hp = $this->db->query('SELECT * FROM v_money_transactions WHERE account_id = 1 AND item_id NOT IN('.implode(',',$this->found_rows).')');
+			$in_hp = $this->db->query('SELECT * FROM v_money_transactions WHERE account_id = 1 AND item_id NOT IN('.implode(',',$this->found_rows).') AND `date` > "'.$this->csv_last_date.'"');
 			$in_hp = $in_hp->result_array();
 		}else{
 			$in_hp = array();
@@ -198,8 +199,8 @@ class Utils extends My_Controller {
 		
 		
 		echo '<pre>';
-		//echo 'In HP but not the account'."\n\n";
-		//print_r($in_hp);
+		echo 'In HP but not the account'."\n\n";
+		print_r($in_hp);
 		/*echo 'Items found in both'."\n\n";
 		print_r($this->found_rows);*/
 		echo 'In account but not in HP'."\n\n";
