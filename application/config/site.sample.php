@@ -6,7 +6,7 @@ $config['site'] = (object) array (
 									'title' => 'HomePortal',
 								),
 					'email' => (object) array(
-									'default_from' => 'noreply@example.com',
+									'default_from' => 'homeportal@server',
 									'password_subject' => 'HomePortal - Password Reset'
 								),
 					'files' => (object) array (
