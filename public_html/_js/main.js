@@ -74,7 +74,7 @@ $(function() {
 				west__spacing_open: 0,
 				west__size: 180,
 				east__initClosed: true,
-				east__size: 200,
+				east__size: 220,
 				east__spacing_open: 0,
 				east__spacing_closed: 0,
 				east__closable: true,
@@ -277,6 +277,7 @@ $(function() {
 			$('#search_results .overview').html(return_html);
 			$.system.layout.open('east');
 			$('#search_close').show();
+			$.system.resize_all();
 		},'search='+$('#header_search input').val());
   });
   

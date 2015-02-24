@@ -122,9 +122,11 @@ $(function() {
 		header: false,
 		editable: true,
 		firstDay: 1,
-		eventSources: ['/calendar/all','http://www.google.com/calendar/feeds/en.uk%23holiday%40group.v.calendar.google.com/public/basic'],
+		eventSources: ['/calendar/all','https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=0CCEQFjAA&url=https%3A%2F%2Fwww.google.com%2Fcalendar%2Fical%2Fen_gb.uk%2523holiday%40group.v.calendar.google.com%2Fpublic%2Fbasic.ics&ei=OCRqVJasDILdavKCgvAP&usg=AFQjCNGxy-zL8Kq5sPhEITFx0ydJTJSJdQ&sig2=4KvzfQesaOQ9KYe0skd8Mw&cad=rja'],
 		height: ($('#main').height()-42)
 	});
+	
+	/* http://www.google.com/calendar/feeds/en.uk%23holiday%40group.v.calendar.google.com/public/basic */
 	
 	$.system.layout.options.center.onresize_end = function(){
 		$('.calendar_grid').fullCalendar('option', 'height', ($('#main').height()-42));
