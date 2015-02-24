@@ -40,6 +40,20 @@ class myLogin {
 		return false;
 	}
 	
+	function check_password($password){
+		$user = $this->CI->load->activeModelReturn('model_users','model_user',array($this->user->id()));
+		
+		if ($user->num_rows() == 1){
+			$hash = sha1(rtrim($password).$user->pass_salt."d72Hs0gtB");
+			if ($hash == $user->pass_hash){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
+	
 	function &user(){
 		return $this->user;
 	}

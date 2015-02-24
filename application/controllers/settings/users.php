@@ -78,6 +78,56 @@ class Users extends My_Controller {
 			$this->user->family_id = $this->mylogin->user()->family_id;
 			$this->user->created_date = date('Y-m-d H:i:s');
 			$this->user->deleted = 0;
+			
+			//check we have the new password details
+			if(!empty($this->input->post('new_password1','')) && !empty($this->input->post('new_password2',''))){
+				
+				//check they are the same
+				if($this->input->post('new_password1','') == $this->input->post('new_password2','')){
+					
+					//create the password and the hash details
+					$this->user->pass_salt = md5(uniqid(time(),true));
+					$this->user->password = $this->input->post('new_password1','');
+
+				}else{
+					$this->json->setData(false);
+					$this->json->setMessage('Passwords do not match');
+					$this->json->outputData();
+				}
+			}else{
+				$this->json->setData(false);
+				$this->json->setMessage('Must enter a password');
+				$this->json->outputData();
+			}
+			
+		}else{
+			
+			//check they are editing the current user or they are admin
+			if($this->mylogin->user()->is_admin() || $this->mylogin->user()->id() == $this->user->id()){
+				
+				//if they are not admin check their old password is right
+				if(!$this->mylogin->user()->is_admin()){
+					if(!$this->mylogin->check_password($this->input->post('old_password',''))){
+						$this->json->setData(false);
+						$this->json->setMessage('Old password was not correct');
+						$this->json->outputData();
+					}
+				}
+			
+				//check they are the same
+				if($this->input->post('new_password1','') == $this->input->post('new_password2','')){
+					
+					//create the password and the hash details
+					$this->user->pass_salt = md5(uniqid(time(),true));
+					$this->user->password = $this->input->post('new_password1','');
+
+				}else{
+					$this->json->setData(false);
+					$this->json->setMessage('Passwords do not match');
+					$this->json->outputData();
+				}
+			}
+			
 		}
 		
 		if($this->user->save()){
