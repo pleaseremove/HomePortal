@@ -1,8 +1,11 @@
 <div id="title_bar" class="box_background border_color_bottom">
-	<h2>Account Statistics</h2>
+	<h2>Statistics: Account</h2>
 </div>
 
 <div id="content">
+
+	{include file="money/statistics/tab_bar.tpl" active_tab="account"}
+
 	<form action="money/statistics/account_breakdown">
 		<p style="margin: 10px 2%;">
 			<label>Account</label>

@@ -1,8 +1,10 @@
 <div id="title_bar" class="box_background border_color_bottom">
-	<h2>Category Statistics: {$category->description}</h2>
+	<h2>Statistics: Category - {$category->description|default:'All'}</h2>
 </div>
 
 <div id="content">
+
+	{include file="money/statistics/tab_bar.tpl" active_tab="category"}
 
 	<form action="money/categories/stats/7">
 		<p style="margin: 10px 2%;">
@@ -12,6 +14,7 @@
 			<input class="date_picker" name="date_range_e[date]" value="{$smarty.post.date_range_e.date}" style="width:70px;" />
 			<label style="margin-left:10px">Category</label>
 			<select name="category">
+				<option value="0">All</option>
 				{foreach from=$categories name=category item=c}
 					{if $group != $c->parent}
             {if !$smarty.foreach.category.first}</optgroup>{/if}
@@ -54,13 +57,21 @@
 		</div>
 	</div>
 	
-	{include file="money/statistics/day_of_week_distributions_widget.tpl"}
+	{include file="money/statistics/day_of_week_distributions_widget.tpl" graph_type='breakdown'}
 	
-	{include file="money/statistics/month_distributions_widget.tpl"}
+	{include file="money/statistics/day_of_week_distributions_widget.tpl" graph_type='totals'}
 	
-	{include file="money/statistics/numeric_distributions_widget.tpl" widget_type='day_of_month'}
+	{include file="money/statistics/month_distributions_widget.tpl" graph_type='breakdown'}
 	
-	{include file="money/statistics/numeric_distributions_widget.tpl" widget_type='week_of_year'}
+	{include file="money/statistics/month_distributions_widget.tpl" graph_type='totals'}
+	
+	{include file="money/statistics/numeric_distributions_widget.tpl" widget_type='day_of_month' graph_type='breakdown'}
+	
+	{include file="money/statistics/numeric_distributions_widget.tpl" widget_type='day_of_month' graph_type='totals'}
+	
+	{include file="money/statistics/numeric_distributions_widget.tpl" widget_type='week_of_year' graph_type='breakdown'}
+	
+	{include file="money/statistics/numeric_distributions_widget.tpl" widget_type='week_of_year' graph_type='totals'}
 	
 </div>
 

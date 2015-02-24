@@ -208,6 +208,25 @@ class Money_stats_model extends CI_Model {
 			AND YEAR(mi.date) = '.$year.'
 		GROUP BY mc.parent
 		ORDER BY mc2.description'));
+		
+		/*
+		UNION
+		SELECT
+			"Income" AS "category",
+			0 AS "target_amount",
+			(SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_items.item_id = money_transactions.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.parent = mc2.money_category_id AND money_items.trans_type = -1 AND money_items.family_id = '.$this->mylogin->user()->family_id.' AND money_items.deleted = 0 AND YEAR(money_items.date) = '.$year.' AND MONTH(money_items.date) = 1) AS "Jan",
+			(SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_items.item_id = money_transactions.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.parent = mc2.money_category_id AND money_items.trans_type = -1 AND money_items.family_id = '.$this->mylogin->user()->family_id.' AND money_items.deleted = 0 AND YEAR(money_items.date) = '.$year.' AND MONTH(money_items.date) = 2) AS "Feb",
+			(SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_items.item_id = money_transactions.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.parent = mc2.money_category_id AND money_items.trans_type = -1 AND money_items.family_id = '.$this->mylogin->user()->family_id.' AND money_items.deleted = 0 AND YEAR(money_items.date) = '.$year.' AND MONTH(money_items.date) = 3) AS "Mar",
+			(SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_items.item_id = money_transactions.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.parent = mc2.money_category_id AND money_items.trans_type = -1 AND money_items.family_id = '.$this->mylogin->user()->family_id.' AND money_items.deleted = 0 AND YEAR(money_items.date) = '.$year.' AND MONTH(money_items.date) = 4) AS "Apr",
+			(SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_items.item_id = money_transactions.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.parent = mc2.money_category_id AND money_items.trans_type = -1 AND money_items.family_id = '.$this->mylogin->user()->family_id.' AND money_items.deleted = 0 AND YEAR(money_items.date) = '.$year.' AND MONTH(money_items.date) = 5) AS "May",
+			(SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_items.item_id = money_transactions.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.parent = mc2.money_category_id AND money_items.trans_type = -1 AND money_items.family_id = '.$this->mylogin->user()->family_id.' AND money_items.deleted = 0 AND YEAR(money_items.date) = '.$year.' AND MONTH(money_items.date) = 6) AS "Jun",
+			(SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_items.item_id = money_transactions.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.parent = mc2.money_category_id AND money_items.trans_type = -1 AND money_items.family_id = '.$this->mylogin->user()->family_id.' AND money_items.deleted = 0 AND YEAR(money_items.date) = '.$year.' AND MONTH(money_items.date) = 7) AS "Jul",
+			(SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_items.item_id = money_transactions.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.parent = mc2.money_category_id AND money_items.trans_type = -1 AND money_items.family_id = '.$this->mylogin->user()->family_id.' AND money_items.deleted = 0 AND YEAR(money_items.date) = '.$year.' AND MONTH(money_items.date) = 8) AS "Aug",
+			(SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_items.item_id = money_transactions.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.parent = mc2.money_category_id AND money_items.trans_type = -1 AND money_items.family_id = '.$this->mylogin->user()->family_id.' AND money_items.deleted = 0 AND YEAR(money_items.date) = '.$year.' AND MONTH(money_items.date) = 9) AS "Sep",
+			(SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_items.item_id = money_transactions.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.parent = mc2.money_category_id AND money_items.trans_type = -1 AND money_items.family_id = '.$this->mylogin->user()->family_id.' AND money_items.deleted = 0 AND YEAR(money_items.date) = '.$year.' AND MONTH(money_items.date) = 10) AS "Oct",
+			(SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_items.item_id = money_transactions.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.parent = mc2.money_category_id AND money_items.trans_type = -1 AND money_items.family_id = '.$this->mylogin->user()->family_id.' AND money_items.deleted = 0 AND YEAR(money_items.date) = '.$year.' AND MONTH(money_items.date) = 11) AS "Nov",
+			(SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_items.item_id = money_transactions.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.parent = mc2.money_category_id AND money_items.trans_type = -1 AND money_items.family_id = '.$this->mylogin->user()->family_id.' AND money_items.deleted = 0 AND YEAR(money_items.date) = '.$year.' AND MONTH(money_items.date) = 12) AS "Dec"
+			*/
 	}
 	
 	function current_month_progress(){
@@ -232,6 +251,33 @@ class Money_stats_model extends CI_Model {
 				AND mi.trans_type = -1
 				AND YEAR(mi.date) = YEAR(CURRENT_DATE())
 				AND MONTH(mi.date) = MONTH(CURRENT_DATE())
+				AND mi.family_id = '.$this->mylogin->user()->family_id.'
+				AND mi.deleted = 0
+			GROUP BY mc.parent
+			ORDER BY mc2.description
+		'));
+	}
+	
+	function current_year_progress(){
+		return $this->load->activeModelReturn('model_money_catagories',array(NULL,NULL,'
+			SELECT
+				mc2.description AS "category",
+				ROUND(SUM(mt.amount),2) AS "spent",
+				(mc2.target_amount*12) AS target,
+				ROUND(((SUM(mt.amount) / (mc2.target_amount*12)) * 100)) AS percent,
+				(SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_transactions.item_id = money_items.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.money_category_id NOT IN (SELECT money_category_id FROM money_catagories WHERE dont_include_in_stats = 1) AND money_catagories.parent = mc.parent AND money_items.trans_type = -1 AND money_items.family_id = 1 AND money_items.date <= DATE_SUB(CURRENT_DATE(),INTERVAL 1 YEAR) AND YEAR(money_items.date) = YEAR(DATE_SUB(CURRENT_DATE(),INTERVAL 1 YEAR))) AS last_year,
+				ROUND(((SELECT ROUND(SUM(money_transactions.amount),2) FROM money_transactions JOIN money_items ON money_transactions.item_id = money_items.item_id JOIN money_catagories ON money_catagories.money_category_id = money_transactions.category_id WHERE money_catagories.money_category_id NOT IN (SELECT money_category_id FROM money_catagories WHERE dont_include_in_stats = 1) AND money_catagories.parent = mc.parent AND money_items.trans_type = -1 AND money_items.family_id = 1 AND money_items.date <= DATE_SUB(CURRENT_DATE(),INTERVAL 1 YEAR) AND YEAR(money_items.date) = YEAR(DATE_SUB(CURRENT_DATE(),INTERVAL 1 YEAR))) / (mc2.target_amount*12))*100) AS percent_last_year,
+				ROUND((DAYOFYEAR(CURRENT_DATE())/365)*100) AS percent_through_year
+			FROM money_transactions AS mt
+			JOIN money_items AS mi
+				ON mt.item_id = mi.item_id
+			JOIN money_catagories AS mc
+				ON mc.money_category_id = mt.category_id
+			JOIN money_catagories AS mc2
+				ON mc2.money_category_id = mc.parent
+			WHERE mc.money_category_id NOT IN (SELECT money_category_id FROM money_catagories WHERE dont_include_in_stats = 1)
+				AND mi.trans_type = -1
+				AND YEAR(mi.date) = YEAR(CURRENT_DATE())
 				AND mi.family_id = '.$this->mylogin->user()->family_id.'
 				AND mi.deleted = 0
 			GROUP BY mc.parent
@@ -393,7 +439,7 @@ class Money_stats_model extends CI_Model {
 		
 		$start = ($type=='day_of_month' ? 1 : 0);
 		$end = ($type=='day_of_month' ? 31 : 53);
-		$name = ($type=='day_of_month' ? 'Day of Month Breakdown' : 'Week of Year Breakdown');
+		$name = ($type=='day_of_month' ? 'Day of Month' : 'Week of Year');
 		
 		$sql = 'SELECT
 							'.($type=='day_of_month' ? 'DAY(mi.date)' : 'WEEKOFYEAR(mi.date)').' AS counter_no,

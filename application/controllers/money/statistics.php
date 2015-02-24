@@ -3,10 +3,15 @@
 class Statistics extends My_Controller {
 
 	function index(){
+		$this->json->setData($this->mysmarty->view('money/statistics/index',false,true));
+		$this->json->outputData();
+	}
+	
+	function overview(){
 		$this->mysmarty->assign('cur_month',date('n'));
 		$this->mysmarty->assign('cur_year',date('Y'));
 		$this->mysmarty->assign('year_set',$this->load->activeModelReturn('model_money_items',array(NULL,NULL,'SELECT YEAR(date) as `year` FROM money_items GROUP BY YEAR(date) ORDER BY YEAR(date)')));
-		$this->json->setData($this->mysmarty->view('money/statistics/index',false,true));
+		$this->json->setData($this->mysmarty->view('money/statistics/overview',false,true));
 		$this->json->outputData();
 	}
 	
@@ -16,10 +21,12 @@ class Statistics extends My_Controller {
 		$this->json->outputData();
 	}
 	
-	function category_spending(){
+	function category_aggregate($type='debits'){
 		$this->mysmarty->assign('years',$this->load->activeModelReturn('model_money_items',array(NULL,NULL,'SELECT YEAR(date) as `year` FROM money_items GROUP BY YEAR(date) ORDER BY YEAR(date)')));
 		$this->mysmarty->assign('cur_year',$this->input->post('year',date('Y')));
 		$this->mysmarty->assign('last_year',(((int) $this->input->post('year',date('Y'))-1)));
+		
+		$this->mysmarty->assign('type',$type);
 		
 		$this->mysmarty->assign('table_data',$this->load->activeModelReturn('model_money_catagories',array(NULL,NULL,'SELECT
 			mc2.description AS "top_category",
@@ -60,7 +67,7 @@ class Statistics extends My_Controller {
 		JOIN money_catagories AS mc2
 			ON mc2.money_category_id = mc.parent
 		WHERE mc.money_category_id NOT IN (SELECT money_category_id FROM money_catagories WHERE dont_include_in_stats = 1)
-			AND mi.trans_type = -1
+			AND mi.trans_type = '.($type=='debits' ? '-1' : '1').'
 			AND mi.family_id = '.$this->mylogin->user()->family_id.'
 			AND mi.deleted = 0
 			AND YEAR(mi.date) IN('.$this->input->post('year',date('Y')).','.($this->input->post('year',date('Y'))-1).')
@@ -68,7 +75,7 @@ class Statistics extends My_Controller {
 		ORDER BY mc2.description, mc.description')));
 		
 		
-		$this->json->setData($this->mysmarty->view('money/statistics/category_spending',false,true));
+		$this->json->setData($this->mysmarty->view('money/statistics/category_aggregate',false,true));
 		$this->json->outputData();
 	}
 }
