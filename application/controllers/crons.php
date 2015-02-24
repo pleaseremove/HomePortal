@@ -13,7 +13,7 @@ class Crons extends CI_Controller {
 	function event_alerts(){
 		$this->load->library('email',array('mailtype'=>'html'));
 		
-		$this->email->from('homeportal@server', 'Home Portal');
+		$this->email->from($this->site->email->default_from, 'Home Portal');
 		$this->email->subject('HomePortal - Reminders: '.date('D jS'));
 		
 		//fetch all the users who want this

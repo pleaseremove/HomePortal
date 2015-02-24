@@ -77,7 +77,29 @@
 		</div>
 		
 		<div class="tab c-alarms">
-			<p>Alarms</p>
+			{if $event->isNew()}
+				<div class="repeat_content">
+					<div class="form_50">
+						<label>Alarm Date</label><input type="text" name="alarm_date[]" value="" class="date_picker">
+					</div>
+				
+					<div class="form_50">
+						<label>Alarm Time</label><input type="text" name="alarm_time[]" value="" class="time_picker">
+					</div>
+				</div>
+			{else}
+				{*foreach from=$event->alarms() item=al}
+				<div class="repeat_content">
+					<div class="form_50">
+						<label>Alarm Date</label><input type="text" name="alarm_date[]" value="{$al->alarm_date}" class="date_picker">
+					</div>
+				
+					<div class="form_50">
+						<label>Alarm Time</label><input type="text" name="alarm_time[]" value="{$al->alarm_time|date_format:'%H:%M'}" class="time_picker">
+					</div>
+				</div>
+				{/foreach*}
+			{/if}
 		</div>
 		
 		<input type="hidden" name="event_id" value="{$event->id()|default:'0'}">

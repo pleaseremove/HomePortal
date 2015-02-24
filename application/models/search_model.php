@@ -84,7 +84,7 @@ class Search_model extends CI_Model {
 																	UNION
 																	
 																	(SELECT
-																	  CONCAT(mc.description,': ',DAY(mi.date),'/',MONTH(mi.date),'/',YEAR(mi.date),' - ',m.amount) AS `text`,
+																	  CONCAT(mc.description,': ',DAY(mi.date),'/',MONTH(mi.date),'/',YEAR(mi.date),' - &pound;',ROUND(m.amount,2)) AS `text`,
 																	  'money' AS `type`,
 																	  'money-all' AS `selection`,
 																	  '1' AS `modal`,
@@ -94,7 +94,7 @@ class Search_model extends CI_Model {
 																	JOIN money_items AS mi
 																	  ON m.item_id = mi.item_id
 																	JOIN money_catagories AS mc
-																		ON m.category_id = mc.money_category_id AND mc.top_level = 1
+																		ON m.category_id = mc.money_category_id
 																	WHERE mi.family_id = ".$this->mylogin->user()->family_id."
 																	  AND MATCH (mi.description) AGAINST ('".$this->db->escape_str($search_term)."'))
 																	  
@@ -111,7 +111,7 @@ class Search_model extends CI_Model {
 																	WHERE ii.family_id = ".$this->mylogin->user()->family_id."
 																	  AND MATCH (ii.name,ii.description) AGAINST ('".$this->db->escape_str($search_term)."'))
 																	  
-																	UNION
+																	/*UNION
 																	
 																	(SELECT
 																	  n.name AS `text`,
@@ -124,12 +124,13 @@ class Search_model extends CI_Model {
 																	WHERE n.family_id = ".$this->mylogin->user()->family_id."
 																		AND (n.private = 0 OR n.user_created = ".$this->mylogin->user()->id().")
 																		AND n.deleted = 0
-																	  AND MATCH (n.name,n.note) AGAINST ('".$this->db->escape_str($search_term)."' IN BOOLEAN MODE))
+																	  AND MATCH (n.name,n.note) AGAINST ('".$this->db->escape_str($search_term)."' IN BOOLEAN MODE))*/
 
 																	) AS result_set
 																GROUP BY `link`
 																ORDER BY AVG(`score`) DESC
 																LIMIT ".$offset.",".$limit);
+		
 	  $return_data['data'] = $reselts->result_array();
 	  $temp = $this->db->query('SELECT FOUND_ROWS() AS row_count');
 	  $temp = $temp->row_array();

@@ -19,8 +19,10 @@
 <h2>Contact Details</h2>
 <div class="ui-grid-a">
 	{foreach from=$contact->data() item=d}
-		<div class="ui-block-a">{$d->data_type_name}</div>
-		<div class="ui-block-b">{$d->data_type_view_string|replace:'<%data%>':$d->data}</div>
+		{if $d->in_use}
+			<div class="ui-block-a">{$d->data_type_name}</div>
+			<div class="ui-block-b">{$d->data_type_view_string|replace:'<%data%>':$d->data}{if $d->default} - d{/if}</div>
+		{/if}
 	{/foreach}
 </div>
 
@@ -28,7 +30,7 @@
 <div class="ui-grid-a">
 	{foreach from=$contact->emails() item=e name=cemails}
 		<div class="ui-block-a">Email {$smarty.foreach.cemails.index+1}</div>
-		<div class="ui-block-b">{$e->email}</div>
+		<div class="ui-block-b"><a href="mailto:{$e->email}">{$e->email}</a></div>
 	{/foreach}
 </div>
 
