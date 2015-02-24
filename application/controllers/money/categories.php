@@ -56,7 +56,7 @@ class Categories extends My_Controller {
 		$this->mysmarty->assign('section_title','Money Categories: All');
 		
 		$this->mysmarty->assign('title_buttons',array('
-			<a href="money/categories/add" class="model inline_button" data-height="260" data-width="500" data-menu-click="money-categories" data-selection="money-categories" class="model inline_button">Add Category</a>'
+			<a href="money/categories/add" class="model inline_button" data-height="200" data-width="500" data-menu-click="money-categories" data-selection="money-categories" class="model inline_button">Add Category</a>'
 		));
 		
 		$this->mysmarty->assign('inner_loop','money/categories/all');
@@ -100,22 +100,12 @@ class Categories extends My_Controller {
 		$this->category->parent = $this->input->post('parent',0);
 		$this->category->dont_include_in_stats = $this->input->post('dont_include_in_stats',0);
 		
-		if($this->input->post('new_parent','') !=''){
-			$this->load->activeModel('model_money_catagories','new_category',array(0));
-			$this->new_category->description = $this->input->post('new_parent','');
-			$this->new_category->family_id = $this->mylogin->user()->family_id;
-			$this->new_category->color = $this->input->post('new_parent_color',NULL);
-			$this->new_category->parent = 0;
-			$this->new_category->dont_include_in_stats = 0;
-			$this->new_category->top_level = 1;
-			$this->new_category->save();
-			$this->category->parent = $this->new_category->id();
-		}
-		
 		if($this->category->isNew()){
 			$this->category->family_id = $this->mylogin->user()->family_id;
 			$this->category->top_level = 0;
 			$this->category->color = NULL;
+			$this->category->target_amount = 0;
+			$this->category->system = NULL;
 		}
 		
 		if($this->category->save()){
@@ -134,12 +124,11 @@ class Categories extends My_Controller {
 			$id = $this->input->post('category',0);
 		}
 		
-		if($id!=0){
-			$this->mysmarty->assign('category',$this->load->activeModelReturn('model_money_catagories',array($id)));
+		$this->mysmarty->assign('category',$this->load->activeModelReturn('model_money_catagories',array($id)));
 			
-			$this->mysmarty->assign('categories',$this->load->activeModelReturn('model_money_catagories',array(NULL,NULL,'SELECT jc.description as description, jc.money_category_id as id, c.description as parent FROM money_catagories AS c RIGHT JOIN money_catagories AS jc ON c.money_category_id = jc.parent WHERE jc.parent <> 0 AND c.family_id = '.$this->mylogin->user()->family_id.' ORDER BY c.description, jc.description')));
+		$this->mysmarty->assign('categories',$this->load->activeModelReturn('model_money_catagories',array(NULL,NULL,'SELECT jc.description as description, jc.money_category_id as id, c.description as parent FROM money_catagories AS c RIGHT JOIN money_catagories AS jc ON c.money_category_id = jc.parent WHERE jc.parent <> 0 AND c.family_id = '.$this->mylogin->user()->family_id.' ORDER BY c.description, jc.description')));
 			
-			$this->mysmarty->assign('money_stats',$this->load->activeModelReturn('model_money_transactions',array(NULL,NULL,'
+		$this->mysmarty->assign('money_stats',$this->load->activeModelReturn('model_money_transactions',array(NULL,NULL,'
 			SELECT
 				ROUND(SUM(mi.trans_type*mt.amount),2) as "net_gain_loss",
 				ROUND(AVG(if(mi.trans_type=1,mt.amount,0)),2) as "average_in",
@@ -151,13 +140,10 @@ class Categories extends My_Controller {
 			FROM money_transactions AS mt
 			JOIN money_items AS mi
 				ON mt.item_id = mi.item_id
-			WHERE mt.category_id = '.$id.'
-				AND '.$this->filters(false,'mi'))));
+			'.($id!=0 ? 'WHERE mt.category_id = '.$id.' AND ' : ' WHERE ').'
+			'.$this->filters(false,'mi'))));
 			
-			$this->json->setData($this->mysmarty->view('money/categories/stats',false,true));
-		}else{
-			$this->json->setMessage('Unknown Category');
-		}
+		$this->json->setData($this->mysmarty->view('money/categories/stats',false,true));
 		$this->json->outputData();
 	}
 }

@@ -27,7 +27,7 @@ class My_Controller extends CI_Controller {
 	}
 	
 	
-	function filters($include_where=false,$family_prefix=false,$extra_data=array()){
+	function filters($include_where=false,$family_prefix=false,$extra_data=array(),$deleted=false){
 		$filters = array();
 		$data = $this->input->post();
 		
@@ -53,7 +53,10 @@ class My_Controller extends CI_Controller {
 		}
 		
 		$filters[] = ($family_prefix ? $family_prefix.'.' : '').'family_id = '.$this->mylogin->user()->family_id;
-		$filters[] = 'deleted = 0';
+		
+		if(!$deleted){
+			$filters[] = 'deleted = 0';
+		}
 		
 		if(isset($data['date_range_s']) && !empty($data['date_range_s'][key($data['date_range_s'])])){
 			$filters[] = '`'.key($data['date_range_s']) .'` >= "'.$data['date_range_s'][key($data['date_range_s'])].'"';

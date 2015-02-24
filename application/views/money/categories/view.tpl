@@ -15,13 +15,5 @@
       <option {if isset($category->dont_include_in_stats) && $category->dont_include_in_stats==1}selected="selected" {/if}label="No" value="1">No</option>
 		</select>
 	</div>
-	<div class="form_50">
-		<label style="width:105px;">New Parent</label>
-		<input type="text" name="new_parent" value="" />
-	</div>
-	<div class="form_50">
-		<label style="width:105px;">New Parent Color</label>
-		<input type="text" name="new_parent_color" value="" />
-	</div>
 	<input type="hidden" name="money_category_id" value="{$category->id()|default:'0'}">
 </form>

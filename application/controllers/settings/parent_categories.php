@@ -4,17 +4,19 @@ class Parent_categories extends My_Controller {
 
 	function index(){
 		$this->mysmarty->assign('categories',$this->load->activeModelReturn('model_money_catagories',array(NULL,
-			'WHERE parent = 0 AND '.$this->filters().$this->order_by('description').$this->limit_by()
+			'WHERE parent = 0 AND '.$this->filters(false,false,array(),true).$this->order_by('description').$this->limit_by()
 		)));
 		
 		$this->mysmarty->assign('headers',array(
-			array('label'=>'Parent','sort'=>'description')
+			array('label'=>'Name','sort'=>'description'),
+			array('label'=>'Target Amount','sort'=>'target_amount'),
+			array('label'=>'Colour')
 		));
 		
 		$this->mysmarty->assign('section_title','Money Categories: Parents');
 		
 		$this->mysmarty->assign('title_buttons',array('
-			<a href="settings/parent_categories/add" class="model inline_button" data-height="260" data-width="500" data-menu-click="money-categories" data-selection="money-categories" class="model inline_button">Add Category</a>'
+			<a href="settings/parent_categories/add" class="model inline_button" data-height="200" data-width="500" data-menu-click="money-categories" data-selection="money-categories">Add Category</a>'
 		));
 		
 		$this->mysmarty->assign('inner_loop','settings/parent_categories/all');
@@ -25,7 +27,7 @@ class Parent_categories extends My_Controller {
 	
 	function filter(){
 		$this->mysmarty->assign('categories',$this->load->activeModelReturn('model_money_catagories',array(NULL,
-			'WHERE parent = 0 '.$this->filters(false,'mi').$this->order_by('description').$this->limit_by()
+			'WHERE parent = 0 '.$this->filters(false,'mi',array(),true).$this->order_by('description').$this->limit_by()
 		)));
 		
 		$this->json->setData($this->mysmarty->view('settings/parent_categories/all',false,true));
@@ -51,9 +53,9 @@ class Parent_categories extends My_Controller {
 	function save(){
 		
 		$this->load->activeModel('model_money_catagories','new_category',array(0));
-		$this->new_category->description = $this->input->post('new_parent','');
+		$this->new_category->description = $this->input->post('description','');
 		$this->new_category->family_id = $this->mylogin->user()->family_id;
-		$this->new_category->color = $this->input->post('new_parent_color',NULL);
+		$this->new_category->color = str_replace('#','',$this->input->post('color','000000'));
 		$this->new_category->parent = 0;
 		$this->new_category->dont_include_in_stats = 0;
 		$this->new_category->top_level = 1;
