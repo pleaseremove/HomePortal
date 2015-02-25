@@ -106,7 +106,7 @@ class Users extends My_Controller {
 			if($this->mylogin->user()->is_admin() || $this->mylogin->user()->id() == $this->user->id()){
 				
 				//if they are not admin check their old password is right
-				if(!$this->mylogin->user()->is_admin()){
+				if(!$this->mylogin->user()->is_admin() || $this->mylogin->user()->id() == $this->user->id()){
 					if(!$this->mylogin->check_password($this->input->post('old_password',''))){
 						$this->json->setData(false);
 						$this->json->setMessage('Old password was not correct');
