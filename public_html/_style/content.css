@@ -229,6 +229,16 @@ table.data_grid tfoot tr {
     border-bottom: 1px solid #DADADA;
 }
 
+tr[data-selection=money-all] a {
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+    height: 20px;
+    line-height: 20px !important;
+    padding: 0 4px;
+    text-decoration: none;
+}
+
 #search_results{
 	padding: 5px;
 	background-image: url("../_images/layout/drop-arrow.png");
@@ -383,10 +393,12 @@ table.data_grid tfoot tr {
 	width: 45.5%;
 	margin: 10px 2%;
 	float: left;
+	max-width: 550px;
 }
 
 .widget.full{
 	width: 95%;
+	max-width: 1200px;
 }
 
 .widget .widget_title{
@@ -608,6 +620,7 @@ table.data_grid tfoot tr {
 .tab_bar{
 	margin: 20px 2% 30px;
 	width: 95%;
+	max-width: 1200px;
 }
 
 .tab_bar li{
