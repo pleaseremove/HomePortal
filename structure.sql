@@ -602,3 +602,25 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
+ALTER ALGORITHM = UNDEFINED DEFINER=`root`@`localhost` VIEW `v_money_transactions` AS SELECT
+	`ma`.`name` AS `account_name`,
+	`mi`.`item_id` AS `item_id`,
+	`mi`.`account_id` AS `account_id`,
+	`ma`.`verified` AS `account_verified`,
+	`mi`.`trans_type` AS `trans_type`,
+	`mi`.`date` AS `date`,
+	COUNT(`mt`.`transaction_id`) AS `trans_count`,
+	ROUND(SUM(`mt`.`amount`),2) AS `amount`,
+	GROUP_CONCAT(`mc2`.`description` SEPARATOR ', ') AS `top_descriptions`,
+	GROUP_CONCAT(CONCAT('<a style="background-color:#',mc2.color,'" href="money/categories/stats/',`mc`.`money_category_id`,'">',`mc`.`description`,'</a>') SEPARATOR ' ') AS `cat_descriptions`,
+	GROUP_CONCAT(`mc`.`description` SEPARATOR ', ') AS `cat_descriptions_without`,
+	`mi`.`family_id` AS `family_id`,
+	`mi`.`deleted` AS `deleted`,
+	`mi`.`confirmed` AS `confirmed`
+FROM ((((`money_transactions` `mt`
+JOIN `money_items` `mi` ON((`mi`.`item_id` = `mt`.`item_id`)))
+JOIN `money_accounts` `ma` ON((`ma`.`account_id` = `mi`.`account_id`)))
+JOIN `money_catagories` `mc` ON((`mt`.`category_id` = `mc`.`money_category_id`)))
+JOIN `money_catagories` `mc2` ON((`mc`.`parent` = `mc2`.`money_category_id`)))
+GROUP BY `mt`.`item_id` ;
