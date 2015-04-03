@@ -20,7 +20,7 @@
 		
 		filter_bind : function(){
 			$.system.get_json(self.attr('data-filter'),function(return_html,extra_data){
-				self.attr('data-limit',100);
+				self.attr('data-limit',0);
 				self.find('#content table.data_grid tbody').html(return_html);
 				if(extra_data){
 					$('#extra_fold').html(extra_data);

@@ -44,7 +44,7 @@ class My_Controller extends CI_Controller {
 							$bits = explode(',',$by);
 							$filters[] = $what.' IN (\''.implode('\',\'',$this->db->escape($bits)).'\')';
 						}else{
-							$filters[] = $what.' = "'.$this->db->escape($by).'"';
+							$filters[] = $what.' = '.$this->db->escape($by);
 						}
 					}
 				}
