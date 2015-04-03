@@ -624,3 +624,62 @@ JOIN `money_accounts` `ma` ON((`ma`.`account_id` = `mi`.`account_id`)))
 JOIN `money_catagories` `mc` ON((`mt`.`category_id` = `mc`.`money_category_id`)))
 JOIN `money_catagories` `mc2` ON((`mc`.`parent` = `mc2`.`money_category_id`)))
 GROUP BY `mt`.`item_id` ;
+
+ALTER ALGORITHM = UNDEFINED DEFINER=`root`@`localhost` VIEW `v_transfers` AS select
+	t.transaction_id as out_id,
+	`a`.`name` AS `out_account`,
+	`i`.`date` AS `date`,
+	ROUND(`t`.`amount`,2) AS `amount`,
+	(
+		select `ia`.`name`
+		from `money_items` `ii`
+		join `money_transactions` `it`
+			on `ii`.`item_id` = `it`.`item_id`
+		join `money_catagories` `ic`
+			on `it`.`category_id` = `ic`.`money_category_id`
+		join `money_accounts` `ia`
+			on `ii`.`account_id` = `ia`.`account_id`
+		where `ic`.`system` = 'trans_in'
+			and `it`.`amount` = `t`.`amount`
+			and `ii`.`date` = `i`.`date`
+		limit 1
+	) AS `in_account`,
+	(
+		select `it`.transaction_id
+		from `money_items` `ii`
+		join `money_transactions` `it`
+			on `ii`.`item_id` = `it`.`item_id`
+		join `money_catagories` `ic`
+			on `it`.`category_id` = `ic`.`money_category_id`
+		join `money_accounts` `ia`
+			on `ii`.`account_id` = `ia`.`account_id`
+		where `ic`.`system` = 'trans_in'
+			and `it`.`amount` = `t`.`amount`
+			and `ii`.`date` = `i`.`date`
+		limit 1
+	) AS `in_id`,
+	CONCAT(t.transaction_id,'-',(
+		select `it`.transaction_id
+		from `money_items` `ii`
+		join `money_transactions` `it`
+			on `ii`.`item_id` = `it`.`item_id`
+		join `money_catagories` `ic`
+			on `it`.`category_id` = `ic`.`money_category_id`
+		join `money_accounts` `ia`
+			on `ii`.`account_id` = `ia`.`account_id`
+		where `ic`.`system` = 'trans_in'
+			and `it`.`amount` = `t`.`amount`
+			and `ii`.`date` = `i`.`date`
+		limit 1
+	)) as combined_id,
+	i.family_id,
+	i.deleted
+from `money_items` `i`
+join `money_transactions` `t`
+	on `i`.`item_id` = `t`.`item_id`
+join `money_catagories` `c`
+	on `t`.`category_id` = `c`.`money_category_id`
+join `money_accounts` `a`
+	on `i`.`account_id` = `a`.`account_id`
+where `c`.`system` = 'trans_out'
+order by `i`.`date` desc ;

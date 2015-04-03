@@ -11,7 +11,8 @@
       		<ul>
       			<li><a data-selection="money-all" href="money/transactions/all">Transactions</a></li>
       			<li><a data-selection="money-add" data-menu-click="money-all" href="money/transactions/add" class="model">New Transactions</a></li>
-      			<li><a data-selection="money-add" data-height="300" data-menu-click="money-all" href="money/transactions/transfer" class="model">New Transfer</a></li>
+      			<li><a data-selection="money-transfers" href="money/transfers/all">Transfers</a></li>
+      			<li><a data-selection="money-transfer" data-height="300" data-menu-click="money-transfers" href="money/transfers/add" class="model">New Transfer</a></li>
       			<li><a data-selection="money-statistics" href="money/statistics">Statistics</a></li>
       			<li><a data-selection="money-categories" href="money/categories">Categories</a></li>
       			<li><a data-selection="money-accounts" href="money/accounts">Accounts</a></li>

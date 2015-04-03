@@ -1,4 +1,4 @@
-<form action="money/transactions/transfer_save">
+<form action="money/treansfers/save">
 
 	<div class="form_30"><label>Date</label><input type="text" name="date" value="{$smarty.now|date_format:'%Y-%m-%d'}" class="date_picker"></div>
 	<div class="form_30">
