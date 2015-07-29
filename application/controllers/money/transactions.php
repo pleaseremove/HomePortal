@@ -144,7 +144,6 @@ class Transactions extends My_Controller {
 				JOIN money_transactions AS mt
 					ON mi.item_id = mt.item_id
 				WHERE mi.date BETWEEN DATE_SUB(\''.$this->input->post('date',date('Y-m-d')).'\',INTERVAL 2 DAY) AND DATE_ADD(\''.$this->input->post('date',date('Y-m-d')).'\',INTERVAL 2 DAY)
-					AND mi.account_id = '.$this->input->post('account_id',0).'
 					AND mi.family_id = '.$this->mylogin->user()->family_id.'
 				GROUP BY mi.item_id
 				HAVING ROUND(SUM(mt.amount),2) = '.$total_amount));
