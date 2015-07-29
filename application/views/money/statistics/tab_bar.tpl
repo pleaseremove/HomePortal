@@ -2,6 +2,7 @@
 	<li><a {if $active_tab=="overview"}class="current"{/if} data-selection="money-statistics" href="money/statistics/overview">Overview <br />Statistics</a></li>
 	<li><a {if $active_tab=="account"}class="current"{/if} data-selection="money-statistics" href="money/statistics/account_breakdown">Account <br />Statistics</a></li>
 	<li><a {if $active_tab=="category"}class="current"{/if} data-selection="money-statistics" href="money/categories/stats/0">Category <br />Statistics</a></li>
+	<li><a {if $active_tab=="year_comparison"}class="current"{/if} data-selection="money-statistics" href="money/statistics/year_comparison">Category <br />Comparison</a></li>
 	<li><a {if $active_tab=="cat_debits"}class="current"{/if} data-selection="money-statistics" href="money/statistics/category_aggregate/debits">Category <br />Spending</a></li>
 	<li><a {if $active_tab=="cat_credits"}class="current"{/if} data-selection="money-statistics" href="money/statistics/category_aggregate/credits">Category <br />Income</a></li>
 </ul>

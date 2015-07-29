@@ -619,7 +619,7 @@ tr[data-selection=money-all] a {
 
 .tab_bar{
 	margin: 20px 2% 30px;
-	width: 95%;
+	width: 96%;
 	max-width: 1200px;
 }
 
@@ -627,7 +627,7 @@ tr[data-selection=money-all] a {
 	display: inline-block;
 	list-style: outside none none;
 	text-align: center;
-	width: 19.7%;
+	width: 16.3%;
 	position: relative;
 }
 

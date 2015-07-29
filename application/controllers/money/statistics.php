@@ -78,6 +78,13 @@ class Statistics extends My_Controller {
 		$this->json->setData($this->mysmarty->view('money/statistics/category_aggregate',false,true));
 		$this->json->outputData();
 	}
+	
+	function year_comparison(){
+		$this->mysmarty->assign('cur_month',date('n'));
+		$this->mysmarty->assign('cur_year',date('Y'));
+		$this->json->setData($this->mysmarty->view('money/statistics/year_comparison',false,true));
+		$this->json->outputData();
+	}
 }
 
 ?>

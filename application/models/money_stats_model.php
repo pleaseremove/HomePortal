@@ -285,6 +285,57 @@ class Money_stats_model extends CI_Model {
 		'));
 	}
 	
+	function year_comparison(){
+		$sql = 'SELECT
+				mc2.description AS "top_category",
+				mc.description AS "category",
+				mc2.target_amount*12 AS "category_target",
+				IFNULL(ROUND(SUM(mt.amount),2),0) AS "spent",
+				(
+					SELECT IFNULL(ROUND(SUM(money_transactions.amount),2),0)
+					FROM money_transactions
+					JOIN money_items
+						ON money_transactions.item_id = money_items.item_id
+					JOIN money_catagories
+						ON money_catagories.money_category_id = money_transactions.category_id
+					WHERE money_catagories.money_category_id NOT IN (SELECT money_category_id FROM money_catagories WHERE dont_include_in_stats = 1)
+					AND money_catagories.money_category_id = mc.money_category_id
+					AND money_items.trans_type = -1
+					AND money_items.family_id = '.$this->mylogin->user()->family_id.'
+					AND DAYOFYEAR(money_items.date) <= DAYOFYEAR(CURRENT_DATE())
+					AND YEAR(money_items.date) = YEAR(DATE_SUB(CURRENT_DATE(),INTERVAL 1 YEAR))
+				) AS last_year,
+				(
+					SELECT IFNULL(ROUND(SUM(money_transactions.amount),2),0)
+					FROM money_transactions
+					JOIN money_items
+						ON money_transactions.item_id = money_items.item_id
+					JOIN money_catagories
+						ON money_catagories.money_category_id = money_transactions.category_id
+					WHERE money_catagories.money_category_id NOT IN (SELECT money_category_id FROM money_catagories WHERE dont_include_in_stats = 1)
+					AND money_catagories.money_category_id = mc.money_category_id
+					AND money_items.trans_type = -1
+					AND money_items.family_id = '.$this->mylogin->user()->family_id.'
+					AND YEAR(money_items.date) = YEAR(DATE_SUB(CURRENT_DATE(),INTERVAL 1 YEAR))
+				) AS last_year_total
+			FROM money_transactions AS mt
+			JOIN money_items AS mi
+				ON mt.item_id = mi.item_id
+			JOIN money_catagories AS mc
+				ON mc.money_category_id = mt.category_id
+			JOIN money_catagories AS mc2
+				ON mc2.money_category_id = mc.parent
+			WHERE mc.money_category_id NOT IN (SELECT money_category_id FROM money_catagories WHERE dont_include_in_stats = 1)
+				AND mi.trans_type = -1
+				AND YEAR(mi.date) = YEAR(CURRENT_DATE())
+				AND mi.family_id = '.$this->mylogin->user()->family_id.'
+				AND mi.deleted = 0
+			GROUP BY mc.money_category_id
+			ORDER BY mc2.description, mc.description';
+			
+			return $this->load->activeModelReturn('model_money_transactions',array(NULL,NULL,$sql));
+	}
+	
 	function balance_over_time($account_id=0){
 		$balance = 0;
 		$start_year = 2012;
