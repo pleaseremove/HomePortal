@@ -9,6 +9,7 @@ class model_contacts_main extends ActiveRecord {
 	private $related = false;
 	private $children = false;
 	private $categories = false;
+	private $sms = false;
 	
 	public function emails(){
 		if(!$this->emails){
@@ -66,6 +67,14 @@ class model_contacts_main extends ActiveRecord {
 			$return_array[] = $line['category_id'];
 		}
 		return $return_array;
+	}
+	
+	public function sms(){
+		if(!$this->sms){
+			$this->sms = $this->CI->load->activeModelReturn('model_contacts_sms',array(NULL,NULL,'SELECT * FROM (
+    		SELECT * FROM contacts_sms WHERE contact_id = '.$this->id().' AND user_id = '.$this->CI->mylogin->user()->id().' ORDER BY `datetime` DESC LIMIT 100) sub ORDER BY `datetime` ASC'));
+		}
+		return $this->sms;
 	}
 
 }

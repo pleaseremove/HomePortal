@@ -3,8 +3,19 @@
 class Contacts extends My_Controller {
 
 	function all(){
-		$this->mysmarty->assign('contacts',$this->load->activeModelReturn('model_contacts_main',array(NULL,NULL,'SELECT cm.*, (select `data` from contacts_data where contacts_data.contact_id = cm.contact_id and contact_data_type = 1 and in_use = 1 and `default` = 1) AS home_phone, (select `data` from contacts_data where contacts_data.contact_id = cm.contact_id and contact_data_type = 2 and in_use = 1 and `default` = 1) AS mobile_phone, (select email from contacts_emails where contacts_emails.contact_id = cm.contact_id and contacts_emails.`default` = 1) AS email, (select `data` from contacts_data where contacts_data.contact_id = cm.contact_id and contact_data_type = 4 and in_use = 1 and `default` = 1) AS facebook FROM contacts_main AS cm left join contacts_category_links as ccl on cm.contact_id = ccl.contact_id
-			'.$this->filters(true).' AND (private = 0 OR created_by = '.$this->mylogin->user()->id().') GROUP BY cm.contact_id'.$this->order_by('first_name, last_name DESC').$this->limit_by()
+		$this->mysmarty->assign('contacts',$this->load->activeModelReturn('model_contacts_main',array(NULL,NULL,'
+			SELECT
+				cm.*,
+				(select `data` from contacts_data where contacts_data.contact_id = cm.contact_id and contact_data_type = 1 and in_use = 1 and `default` = 1) AS home_phone,
+				(select `data` from contacts_data where contacts_data.contact_id = cm.contact_id and contact_data_type = 2 and in_use = 1 and `default` = 1) AS mobile_phone,
+				(select email from contacts_emails where contacts_emails.contact_id = cm.contact_id and contacts_emails.`default` = 1) AS email,
+				(select `data` from contacts_data where contacts_data.contact_id = cm.contact_id and contact_data_type = 4 and in_use = 1 and `default` = 1) AS facebook,
+				(SELECT COUNT(*) from contacts_sms WHERE contacts_sms.contact_id = cm.contact_id AND contacts_sms.user_id = '.$this->mylogin->user()->id().') AS sms_count
+			FROM contacts_main AS cm
+			left join contacts_category_links as ccl
+				on cm.contact_id = ccl.contact_id
+			'.$this->filters(true).' AND (private = 0 OR created_by = '.$this->mylogin->user()->id().')
+			GROUP BY cm.contact_id'.$this->order_by('first_name, last_name DESC').$this->limit_by()
 		)));
 		
 		$categories = $this->load->activeModelReturn('model_contacts_categories',array(NULL,'WHERE family_id = '.$this->mylogin->user()->family_id.' ORDER BY description ASC'));
@@ -39,7 +50,8 @@ class Contacts extends My_Controller {
 			array('label'=>'Mobile','sort'=>'mobile_phone'),
 			array('label'=>'Home','sort'=>'home_phone'),
 			array('label'=>'E-mail','sort'=>'email'),
-			array('label'=>'Facebook')
+			array('label'=>'Facebook'),
+			array('label'=>'Text Messages','sort'=>'sms_count')
 		));
 		
 		$this->mysmarty->assign('inner_loop','contacts/all');
@@ -49,8 +61,18 @@ class Contacts extends My_Controller {
 	}
 	
 	function filter(){
-		$this->mysmarty->assign('contacts',$this->load->activeModelReturn('model_contacts_main',array(NULL,NULL,'SELECT *, (select `data` from contacts_data where contacts_data.contact_id = cm.contact_id and contact_data_type = 1 and in_use = 1 and `default` = 1) AS home_phone, (select `data` from contacts_data where contacts_data.contact_id = cm.contact_id and contact_data_type = 2 and in_use = 1 and `default` = 1) AS mobile_phone, (select email from contacts_emails where contacts_emails.contact_id = cm.contact_id and contacts_emails.`default` = 1) AS email, (select `data` from contacts_data where contacts_data.contact_id = cm.contact_id and contact_data_type = 4 and in_use = 1 and `default` = 1) AS facebook FROM contacts_main AS cm left join contacts_category_links as ccl on cm.contact_id = ccl.contact_id
-			'.$this->filters(true).' AND (private = 0 OR created_by = '.$this->mylogin->user()->id().') GROUP BY cm.contact_id'.$this->order_by('first_name, last_name DESC').$this->limit_by()
+		$this->mysmarty->assign('contacts',$this->load->activeModelReturn('model_contacts_main',array(NULL,NULL,'
+			SELECT cm.*,
+				(select `data` from contacts_data where contacts_data.contact_id = cm.contact_id and contact_data_type = 1 and in_use = 1 and `default` = 1) AS home_phone,
+				(select `data` from contacts_data where contacts_data.contact_id = cm.contact_id and contact_data_type = 2 and in_use = 1 and `default` = 1) AS mobile_phone,
+				(select email from contacts_emails where contacts_emails.contact_id = cm.contact_id and contacts_emails.`default` = 1) AS email,
+				(select `data` from contacts_data where contacts_data.contact_id = cm.contact_id and contact_data_type = 4 and in_use = 1 and `default` = 1) AS facebook,
+				(SELECT COUNT(*) from contacts_sms WHERE contacts_sms.contact_id = cm.contact_id AND contacts_sms.user_id = '.$this->mylogin->user()->id().') AS sms_count
+			FROM contacts_main AS cm
+			left join contacts_category_links as ccl 
+				on cm.contact_id = ccl.contact_id
+			'.$this->filters(true).' AND (private = 0 OR created_by = '.$this->mylogin->user()->id().')
+			GROUP BY cm.contact_id'.$this->order_by('first_name, last_name DESC').$this->limit_by()
 		)));
 		
 		$this->json->setData($this->mysmarty->view('contacts/all',false,true));

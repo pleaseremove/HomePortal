@@ -203,8 +203,50 @@
 				</script>
 			</div>
 		</div><!-- .widget -->
+		</div><!-- .widget -->
+		{/if}
+		
+		{assign var='contact_sms' value=$contact->sms()}
+		
+		{if $contact_sms->num_rows()>0}
+		<div class="widget full">
+			<div class="widget_title">Text Messages</div>
+			<div class="c-sms widget_content box_background border_color_bottom border_color_top border_color_left border_color_right" style="overflow-x:scroll;height:350px;" id="sms_box">
+				{foreach from=$contact_sms item=sms}
+					<div class="sms {$sms->received_sent}">
+						{$sms->message}
+						<div class="datetime">{$sms->datetime|date_format:'%b %e, %Y @ %H:%M'}</div>
+					</div>
+				{/foreach}
+				<div style="clear:left;"></div>
+			</div>
+		</div><!-- .widget -->
+		<script type="text/javascript">
+			var sms_box = document.getElementById('sms_box');
+			sms_box.scrollTo(0,100000000);
+		</script>
 		{/if}
 		
   </div>
 </div>
 <script src="_js/widgets.js" type="text/javascript"></script>
+
+<style type="text/css">
+	.sms{
+		border: 1px solid #E3E3E3;
+		border-radius: 3px;
+		background-color: #fff;
+		padding: 5px;
+	}
+	
+	.sms.received {
+    margin: 5px 50% 5px 0;
+	}
+	.sms.sent {
+    margin: 5px 0 5px 50%;
+	}
+	.sms .datetime{
+    color: #a2a2a2;
+    text-align: right;
+	}
+</style>

@@ -683,3 +683,22 @@ join `money_accounts` `a`
 	on `i`.`account_id` = `a`.`account_id`
 where `c`.`system` = 'trans_out'
 order by `i`.`date` desc ;
+
+CREATE TABLE `contacts_sms` (
+	`contact_sms_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`contact_id` INT(11) NULL DEFAULT NULL,
+	`user_id` INT(11) NULL DEFAULT NULL,
+	`received_sent` ENUM('received','sent','draft','failed','outbox','queued') NULL DEFAULT NULL COLLATE 'latin1_swedish_ci',
+	`datetime` DATETIME NULL DEFAULT NULL,
+	`message` TEXT NULL COLLATE 'latin1_swedish_ci',
+	PRIMARY KEY (`contact_sms_id`),
+	INDEX `user_id` (`user_id`),
+	INDEX `contact_id` (`contact_id`),
+	INDEX `received_sent` (`received_sent`),
+	INDEX `datetime` (`datetime`),
+	FULLTEXT INDEX `message` (`message`)
+)
+COLLATE='utf8_unicode_ci'
+ENGINE=MyISAM
+AUTO_INCREMENT=1
+;

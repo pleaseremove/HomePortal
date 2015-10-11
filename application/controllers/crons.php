@@ -2,12 +2,16 @@
 
 class Crons extends CI_Controller {
 	
+	private $contacts = array();
+	private $current_messages = array();
+	
 	public function __construct(){
 		parent::__construct();
 	}
 	
 	function run_crons(){
 		$this->event_alerts();
+		$this->import_sms();
 	}
 	
 	function event_alerts(){
@@ -70,6 +74,114 @@ class Crons extends CI_Controller {
 			
 		}
 		
+	}
+	
+	function import_sms(){
+		//get all users with sms import turned on
+		$users = $this->load->activeModelReturn('model_users',array(NULL,NULL,'SELECT u.*, (SELECT COUNT(*) FROM contacts_sms WHERE user_id = u.users_id) as sms_count FROM users AS u WHERE sms_import = 1'));
+		
+		$this->load->helper('file');
+		
+		foreach($users as $u){
+			//find the file
+			$file = read_file($this->site->files->sms.$u->username.'/smsarchive.xml');
+			
+			//if it is there read it in
+			if($file){
+				$xml = simplexml_load_string($file);
+				
+				//check there is something worth importing
+				if((int) $xml->attributes()->count > (int) $u->sms_count){
+					
+					//load in what we have in the db
+					$this->fetch_current_messages($u->id());
+					
+					foreach($xml->sms as $sms){
+							
+						$sms_data = (array) $sms;
+						$sms_data = $sms_data['@attributes'];
+						
+						$contact_id = $this->get_contact($sms_data['address']);
+						
+						if($contact_id){
+							
+							switch($sms_data['type']){
+								case '1':
+									$status = 'received';
+									break;
+								case '2':
+									$status = 'sent';
+									break;
+								case '3':
+									$status = 'draft';
+									break;
+								case '4':
+									$status = 'outbox';
+									break;
+								case '5':
+									$status = 'failed';
+									break;
+								case '6':
+									$status = 'queued';
+									break;
+							}
+							
+							$message_unix = intval($sms_data['date']/1000);
+							
+							echo 'testing: '.$message_unix.'-'.$status.$u->id().$contact_id.'|';
+							
+							if(!array_key_exists($message_unix.'-'.$status.$u->id().$contact_id,$this->current_messages)){
+								$db_sms = $this->load->activeModelReturn('model_contacts_sms',array(0));
+								$db_sms->contact_id = $contact_id;
+								$db_sms->user_id = $u->id();
+								$db_sms->received_sent = $status;
+								$db_sms->datetime = date('Y-m-d H:i:s',$message_unix);
+								$db_sms->message = $sms_data['body'];
+								$db_sms->save();
+							}
+						}
+					}
+				}
+				
+			}
+		}
+	}
+	
+	function get_contact($original_number){
+		
+		$original_number = trim($original_number);
+		
+		if(isset($this->contacts[$original_number])){
+			return $this->contacts[$original_number];
+		}
+		
+		//otherwise clean the number up and go find it
+		$number = str_replace('+44','0',$original_number);
+		
+		$contact = $this->load->activeModelReturn('model_contacts_data',array(NULL,'WHERE data = '.$this->db->escape($number).' LIMIT 1'));
+		
+		if(count($contact)==1){
+			$this->contacts[$original_number] = $contact->contact_id;
+			return $contact->contact_id;
+		}else{
+			echo 'failed to fine the number: '+$number;
+			return false;
+		}
+		
+	}
+	
+	function fetch_current_messages($user_id){
+		
+		//need to clean the array out in for multiple users
+		$this->current_messages = array();
+		
+		$messages = $this->load->activeModelReturn('model_contacts_sms',array(NULL,NULL,'select concat(UNIX_TIMESTAMP(`datetime`),\'-\',received_sent,user_id,contact_id) as unique_id from contacts_sms where user_id = '.$user_id));
+		
+		foreach($messages as $m){
+			$this->current_messages[$m->unique_id] = true;
+		}
+		
+		print_r($this->current_messages);
 	}
 }
 
