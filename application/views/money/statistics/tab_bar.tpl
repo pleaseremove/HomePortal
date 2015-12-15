@@ -5,4 +5,5 @@
 	<li><a {if $active_tab=="year_comparison"}class="current"{/if} data-selection="money-statistics" href="money/statistics/year_comparison">Category <br />Comparison</a></li>
 	<li><a {if $active_tab=="cat_debits"}class="current"{/if} data-selection="money-statistics" href="money/statistics/category_aggregate/debits">Category <br />Spending</a></li>
 	<li><a {if $active_tab=="cat_credits"}class="current"{/if} data-selection="money-statistics" href="money/statistics/category_aggregate/credits">Category <br />Income</a></li>
+	<li><a {if $active_tab=="income_outgoing"}class="current"{/if} data-selection="money-statistics" href="money/statistics/income_outgoing">Income / <br />Outgoings</a></li>
 </ul>

@@ -58,7 +58,9 @@ class Statistics extends My_Controller {
 			ROUND(SUM(IF(MONTH(mi.date)=12 AND YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "dec1",
 			
 			ROUND(SUM(IF(YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "total_this",
-			ROUND(SUM(IF(YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "total_last"
+			ROUND(SUM(IF(YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) AS "total_last",
+			ROUND(SUM(IF(YEAR(mi.date)='.($this->input->post('year',date('Y'))-1).',mt.amount,0)),2) - ROUND(SUM(IF(YEAR(mi.date)='.$this->input->post('year',date('Y')).',mt.amount,0)),2) AS "total_diff"
+			
 		FROM money_transactions AS mt
 		JOIN money_items AS mi
 			ON mt.item_id = mi.item_id
@@ -83,6 +85,26 @@ class Statistics extends My_Controller {
 		$this->mysmarty->assign('cur_month',date('n'));
 		$this->mysmarty->assign('cur_year',date('Y'));
 		$this->json->setData($this->mysmarty->view('money/statistics/year_comparison',false,true));
+		$this->json->outputData();
+	}
+	
+	function income_outgoing(){
+		$this->mysmarty->assign('table_data',$this->load->activeModelReturn('model_money_catagories',array(NULL,NULL,'SELECT
+			YEAR(mi.date) AS `year`,
+			ROUND(SUM(CASE WHEN mi.trans_type = 1 THEN mt.amount ELSE 0 END),2) AS incoming,
+			ROUND(SUM(CASE WHEN mi.trans_type = -1 THEN mt.amount ELSE 0 END),2) AS outgoing,
+			ROUND(SUM(CASE WHEN mi.trans_type = 1 THEN mt.amount ELSE 0 END) - SUM(CASE WHEN mi.trans_type = -1 THEN mt.amount ELSE 0 END),2) AS profit
+		FROM money_items AS mi
+		JOIN money_transactions AS mt
+			ON mi.item_id = mt.item_id
+		JOIN money_catagories AS mc
+			ON mt.category_id = mc.money_category_id
+		WHERE mc.dont_include_in_stats = 0
+			AND mi.family_id = '.$this->mylogin->user()->family_id.'
+		GROUP BY YEAR(mi.date)
+		ORDER BY year(mi.date)')));
+		
+		$this->json->setData($this->mysmarty->view('money/statistics/income_outgoing',false,true));
 		$this->json->outputData();
 	}
 }
