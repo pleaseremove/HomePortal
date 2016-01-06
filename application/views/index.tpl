@@ -7,7 +7,7 @@
 		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 		<link rel="icon" type="image/x-icon" href="favicon.ico" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		
+
 		<!-- Styles -->
 		<link rel="stylesheet" title="default" type="text/css" media="screen" href="_style/main.css" />
 		<link rel="stylesheet" title="default" type="text/css" media="screen" href="_style/fonts.css" />
@@ -17,34 +17,34 @@
 		<link rel="stylesheet" title="default" type="text/css" media="screen" href="_style/header.css" />
 		<link rel="stylesheet" title="default" type="text/css" media="screen" href="_style/content.css" />
 		<link rel="stylesheet" title="default" type="text/css" media="screen" href="_style/colours.css" />
-		
+
 		<link rel="stylesheet" title="default" type="text/css" media="screen" href="_style/libs/Aristo/Aristo.css" />
 		<link rel="stylesheet" title="default" type="text/css" media="screen" href="_style/libs/jquery.jgrowl.css" />
 		<link rel="stylesheet" title="default" type="text/css" media="screen" href="_style/libs/fullcalendar.css" />
-		
+
 		<link rel="stylesheet" title="default" type="text/css" media="screen" href="_style/libs/jqplot1.0.8r1250/jquery.jqplot.min.css" />
-		
+
 		<!-- Javascript Libs-->
 		<script src="_js/libs/jquery-1.10.1.min.js" type="text/javascript"></script>
-		
+
 		<script src="_js/libs/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
 
 		<script src="_js/libs/jquery.layout-1.3.0.rc30.79.js" type="text/javascript"></script>
-		
+
 		<script src="_js/libs/jquery.jgrowl.min.js" type="text/javascript"></script>
-		
+
 		<script src="_js/libs/jquery-ui-timepicker-addon.min.js" type="text/javascript"></script>
-		
+
 		<script src="_js/libs/fullcalendar.min.js" type="text/javascript"></script>
-		
+
 		<script src="_js/libs/gcal.js" type="text/javascript"></script>
-		
+
 		<script src="_js/libs/jquery.tinyscrollbar.min.js" type="text/javascript"></script>
-		
+
 		<script src="_js/libs/jquery.form.min.js" type="text/javascript"></script>
-		
+
 		<script src="https://maps.googleapis.com/maps/api/js?v=3.10&sensor=false"></script>
-		
+
 		<script type="text/javascript" src="_js/libs/jqplot1.0.8r1250/jquery.jqplot.min.js"></script>
 		<script type="text/javascript" src="_js/libs/jqplot1.0.8r1250/plugins/jqplot.categoryAxisRenderer.min.js"></script>
 		<script type="text/javascript" src="_js/libs/jqplot1.0.8r1250/plugins/jqplot.highlighter.min.js"></script>
@@ -53,19 +53,19 @@
 		<script type="text/javascript" src="_js/libs/jqplot1.0.8r1250/plugins/jqplot.barRenderer.min.js"></script>
 		<script type="text/javascript" src="_js/libs/jqplot1.0.8r1250/plugins/jqplot.pieRenderer.min.js"></script>
 		<script type="text/javascript" src="_js/libs/jqplot1.0.8r1250/plugins/jqplot.dateAxisRenderer.min.js"></script>
-		
+
 		<script type="text/javascript" src="_js/libs/jqplot1.0.8r1250/plugins/jqplot.ohlcRenderer.min.js"></script>
 		<script type="text/javascript" src="_js/libs/jqplot1.0.8r1250/plugins/jqplot.highlighter.min.js"></script>
 		<script type="text/javascript" src="_js/libs/jqplot1.0.8r1250/plugins/jqplot.cursor.min.js"></script>
-		
+
 		<script src="_js/main.js" type="text/javascript"></script>
 		<script src="_js/datagrid.js" type="text/javascript"></script>
-	
+
 	</head>
 	<body>
 		<div id="header" class="header_color">
 			<h1 id="logo" class="logo">HomePortal</h1>
-			<div id="date_time">{$smarty.now|date_format:'%A, %e'}<sup>{if $smarty.now|date_format:'%e'==1}st{elseif $smarty.now|date_format:'%e'==2}nd{elseif $smarty.now|date_format:'%e'==3}rd{else}th{/if}</sup> {$smarty.now|date_format:'%B %Y'}<span id="clock"></span></div>
+			<div id="date_time">{$smarty.now|date_format:'%A, %e'}<sup>{if $smarty.now|date_format:'%e'==1}st{elseif $smarty.now|date_format:'%e'==2}nd{elseif $smarty.now|date_format:'%e'==3}rd{else}th{/if}</sup> {$smarty.now|date_format:'%B %Y'}</div>
 			<img style="right:475px;position:absolute;top:14px;" alt="Loading..." src="_images/layout/ajax-loader.gif" id="load_status" />
 			<ul>
 				<li><a href="import-export/">Import &amp; Export</a></li>
@@ -87,7 +87,7 @@
 				<input type="text" placeholder="Search..."/>
 			</form>
 		</div><!--#header-->
-		
+
 		<div id="menu" class="box_background border_color_right right_shadow">
 			<div class="scrollbar">
 				<div class="track"><div class="thumb"><div class="end"></div></div></div></div>
@@ -106,7 +106,7 @@
 	  		{include file="overview.tpl"}
 	  	{/if}
 	  </div><!--#main-->
-	  
+
 	  <div id="search_results" class="box_background border_color_left">
 	  	<div class="scrollbar">
 				<div class="track"><div class="thumb"><div class="end"></div></div></div></div>
@@ -117,9 +117,9 @@
 				</div>
 			</div>
 	  </div>
-	  
+
 	  <div id="popup">
-	  	
+
 	  </div>
 
   </body>
