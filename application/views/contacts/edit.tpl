@@ -8,9 +8,10 @@
 			<li class="c-family" data-tab="c-family">Family</li>
 		</ul>
 		<div class="tab c-overview">
-			<div class="form_50"><label>First Name</label><input type="text" name="first_name" value="{$contact->first_name}"></div>
-			<div class="form_50"><label>Last Name</label><input type="text" name="last_name" value="{$contact->last_name}"></div>
-			
+			<div class="form_30"><label>First Name</label><input type="text" name="first_name" value="{$contact->first_name}"></div>
+			<div class="form_30"><label>Last Name</label><input type="text" name="last_name" value="{$contact->last_name}"></div>
+			<div class="form_30"><label>Other Names</label><input type="text" name="other_names" value="{$contact->other_names}"></div>
+
 			<div class="form_30">
 				<label>Title</label>
 				<select name="title_id">
@@ -20,7 +21,9 @@
 					{/foreach}
 				</select>
 			</div>
-			<div class="form_30"><label>Other Names</label><input type="text" name="other_names" value="{$contact->other_names}"></div>
+
+			<div class="form_30"><label>Maiden Name</label><input type="text" name="maiden_name" value="{$contact->maiden_name}"></div>
+
 			<div class="form_30">
 				<label>Gender</label>
 				<select name="gender">
@@ -28,7 +31,7 @@
 					<option value="1" {if isset($contact->gender) && $contact->gender==1}selected="selected"{/if}>Male</option>
 				</select>
 			</div>
-			
+
 			<div class="form_30"><label>Birthday</label><input type="text" name="birthday" value="{$contact->birthday|date_format:'%Y-%m-%d'}" class="date_picker"></div>
 			<div class="form_30"><label>Aniversary</label><input type="text" name="aniversary" value="{$contact->aniversary|date_format:'%Y-%m-%d'}" class="date_picker"></div>
 			<div class="form_30">
@@ -38,7 +41,7 @@
 					<option value="1" {if isset($contact->private) && $contact->private==1}selected="selected"{/if}>Yes</option>
 				</select>
 			</div>
-			
+
 			<div class="form_30">
 				<label>Groups</label>
 				<ul class="multiselect" style="height:100px;overflow-y:scroll;width:100%;">
@@ -47,26 +50,26 @@
 				{/foreach}
 				</ul>
 			</div>
-			
+
 			<div class="form_30">
 				<label>Current Image</label>
 				<div class="img_holder" style="width:81px;">
 					<div class="img_holder2" style="background-image: url('_images/contact_photos/{$contact->picture|default:'default_image.png'}')"></div>
 				</div>
 			</div>
-			
+
 			<div class="form_30">
 				<label>New Image</label>
 				<input type="file" name="contact_photo" />
 			</div>
-			
+
 			<div class="form_100">
 				<label>Notes</label>
 				<textarea style="height:200px;" name="notes">{$contact->notes|replace:'\n':"\n"}</textarea>
 			</div>
-	
+
 		</div>
-		
+
 		<div class="tab c-details">
 			<div class="repeat">
 			{if $contact->isNew() || count($contact->data()) == 0}
@@ -82,7 +85,7 @@
 							{/foreach}
 						</select>
 					</div>
-					
+
 					<div class="form_50">
 						<label>Value</label>
 						<input name="data_type_value[]" value="" style="float:left;width:80%;" />
@@ -101,7 +104,7 @@
 								{/foreach}
 							</select>
 						</div>
-						
+
 						<div class="form_50">
 							<label>Value</label>
 							<input name="data_type_value[]" type="text" value="{$cd->data}" style="float:left;width:80%;" />
@@ -112,11 +115,11 @@
 				{/foreach}
 			{/if}
 		</div>
-		
+
 		<span class="add_item" data-where=".c-details .repeat" style="background: url('_images/icons/add.png') no-repeat scroll 0 0 transparent;display:block;height:24px;position:absolute;right:30px;top:75px;width:24px;cursor:pointer;"></span>
-		
+
 		</div>
-		
+
 		<div class="tab c-emails">
 			<div class="repeat">
 			{if $contact->isNew() || count($contact->emails()) == 0}
@@ -141,10 +144,10 @@
 				{/foreach}
 			{/if}
 			</div>
-			
+
 			<span class="add_item" data-where=".c-emails .repeat" style="background: url('_images/icons/add.png') no-repeat scroll 0 0 transparent;display:block;height:24px;position:absolute;right:30px;top:75px;width:24px;cursor:pointer;"></span>
 		</div>
-		
+
 		<div class="tab c-addresses">
 			<div class="repeat">
 			{if $contact->isNew() || count($contact->addresses()) == 0}
@@ -199,10 +202,10 @@
 				{/foreach}
 			{/if}
 			</div>
-			
+
 			<span class="add_item" data-where=".c-addresses .repeat" style="background: url('_images/icons/add.png') no-repeat scroll 0 0 transparent;display:block;height:24px;position:absolute;right:30px;top:75px;width:24px;cursor:pointer;"></span>
 		</div>
-		
+
 		<div class="tab c-family">
 			<h2>Related Contacts</h2>
 			<div class="repeat rels">
@@ -236,10 +239,10 @@
 				{/foreach}
 			{/if}
 			</div>
-			
+
 			<span class="add_item" data-where=".c-family .repeat.rels" style="background: url('_images/icons/add.png') no-repeat scroll 0 0 transparent;display:block;height:24px;position:absolute;right:30px;top:75px;width:24px;cursor:pointer;"></span>
 		</div>
-		
+
 	</div>
 	<script type="text/javascript">
 		$(function(){
@@ -268,22 +271,22 @@
 				}
 			});
 		});
-		
+
 		$('.c-details .repeat_content select').each(function(){
 			update_group_id($(this));
 			$(this).on('change',function(){
 				update_group_id($(this));
 			});
 		});
-		
+
 		function update_group_id($element){
 			$element.parent().parent().find('input[type=radio]').attr('name','data_type_default['+$element.val()+']');
 		}
-		
+
 		function number_blocks(selector){
 			$(selector+' .repeat_content').each(function(index){
 				$(this).find('input[type=checkbox]').each(function(){
-        	this.name = this.name.replace(/\[\d+\]/, "[" + index + "]");   
+        	this.name = this.name.replace(/\[\d+\]/, "[" + index + "]");
         });
 	      $(this).find('input[type=radio]').each(function(){
 	      	$(this).val(index);

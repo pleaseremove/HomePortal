@@ -702,3 +702,10 @@ COLLATE='utf8_unicode_ci'
 ENGINE=MyISAM
 AUTO_INCREMENT=1
 ;
+
+ALTER TABLE `contacts_main`
+	ADD COLUMN `maiden_name` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci' AFTER `other_names`;
+
+ALTER TABLE `contacts_main`
+	DROP INDEX `first_name_other_names_last_name_notes`,
+	ADD FULLTEXT INDEX `first_name_other_names_last_name_notes` (`first_name`, `other_names`, `last_name`, `notes`, `maiden_name`);
