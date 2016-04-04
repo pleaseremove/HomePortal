@@ -149,8 +149,24 @@ class Transactions extends My_Controller {
 				HAVING ROUND(SUM(mt.amount),2) = '.$total_amount));
 			
 			if(count($dupe_check)>0){
+
+				//select out the items from a nicer set of data for display
+				$duplicate_ids = array();
+
+				foreach($dupe_check as $dp){
+					$duplicate_ids[] = $dp->item_id;
+				}
+
+				$dps = $this->load->activeModelReturn('model_money_transactions',array(NULL,NULL,
+					'SELECT v_money_transactions.* FROM v_money_transactions '.$this->filters(true,false,array('filter'=>array('item_id'=>$duplicate_ids))).$this->order_by('date DESC, item_id DESC').$this->limit_by()
+				));
+
 				$this->json->setData(false);
-				$this->json->setMessage('Duplicate Transaction Detected. <a href="money/transactions/allow_dupe" class="post_only">Click here</a> to unlock for this transaction');
+				$message_html = '';
+				foreach($dps as $dt){
+					$message_html.='<p title="'.date('Y-m-d',strtotime($dt->date)).'">'.$dt->account_name.': &pound;'.$dt->amount.' - '.$dt->cat_descriptions.'</p>';
+				}
+				$this->json->setMessage('Duplicate Transaction Detected.<br /><br />'.$message_html.' <br /><a href="money/transactions/allow_dupe" class="post_only">Click here</a> to unlock for this transaction',true);
 				$this->json->outputData();
 				exit();
 			}

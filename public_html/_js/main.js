@@ -41,7 +41,7 @@ $(function() {
 		  		$.system.message('You have been logged out','error');
 		  		window.location = '/';
 		  	}else if(return_data.message!=''){
-		  		$.system.message(return_data.message,'alert');
+		  		$.system.message(return_data.message,'alert',return_data.message_fixed);
 		  	}
 		  }
 		},
@@ -55,9 +55,12 @@ $(function() {
 			});
 		},
 
-		message : function(message,type){
+		message : function(message,type,fixed){
 			type = typeof type !== 'undefined' ? type : 'message';
 			var sticky_var = (type=='error' ? true : false);
+			if(fixed){
+				sticky_var = true;
+			}
 			var life_var = (type=='alert' ? 5000 : 3000);
 			$.jGrowl(message, { life: life_var, theme: 'notification_'+type, sticky: sticky_var });
 		},

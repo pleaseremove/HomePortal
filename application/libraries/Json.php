@@ -6,6 +6,7 @@ class Json{
 	private $extra = false;
 	private $message = '';
 	
+	private $fixed = false;
 	public function setData($data){
 		unset($data->CI);
 		$this->data = $data;
@@ -15,8 +16,9 @@ class Json{
 		$this->extra = $extra;
 	}
 	
-	public function setMessage($message=''){
+	public function setMessage($message='',$fixed=false){
 		$this->message = $message;
+		$this->fixed = $fixed;
 	}
 	
 	public function returnData(){
@@ -29,7 +31,7 @@ class Json{
 	public function outputData(){
 		if(isset($_POST['is_ajax'])){
 			$return_state = ($this->data ? true : false);
-			echo json_encode(array('state'=>$return_state,'message'=>$this->message,'data'=>$this->data,'extra'=>$this->extra));
+			echo json_encode(array('state'=>$return_state,'message'=>$this->message,'message_fixed'=>$this->fixed,'data'=>$this->data,'extra'=>$this->extra));
 			$this->clearData();
 			exit();
 		}else{
