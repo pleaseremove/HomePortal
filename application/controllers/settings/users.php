@@ -78,9 +78,9 @@ class Users extends My_Controller {
 			$this->user->family_id = $this->mylogin->user()->family_id;
 			$this->user->created_date = date('Y-m-d H:i:s');
 			$this->user->deleted = 0;
-			
+
 			//check we have the new password details
-			if(!empty($this->input->post('new_password1','')) && !empty($this->input->post('new_password2',''))){
+			if(!$this->input->post('new_password1','') && !$this->input->post('new_password2','')){
 				
 				//check they are the same
 				if($this->input->post('new_password1','') == $this->input->post('new_password2','')){
