@@ -1,0 +1,15 @@
+#ignore thumbnails created by windows
+Thumbs.db
+/resources
+/application/logs/*.php
+/system/cache/*
+Statement Download *.csv
+Statement Download *.ofx
+.memdump
+/public_html/_images/contact_photos/*.jpg
+/private_key.ppk
+/public_key.txt
+application/config/database.php
+application/config/site.php
+application/config/config.php
+.idea/
