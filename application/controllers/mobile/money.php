@@ -58,6 +58,64 @@ class money extends MyM_Controller {
 		$this->mysmarty->assign('page_title','Money');
 		$this->mysmarty->view('mobile/money/index');
 	}
+	
+	function transfer(){
+		$this->mysmarty->assign('accounts',$this->load->activeModelReturn('model_money_accounts',array(NULL,'WHERE family_id = '.$this->mylogin->user()->family_id.' ORDER BY name ASC')));
+		$this->mysmarty->view('mobile/money/transfer');
+	}
+	
+	function save_transfer(){
+		$tran_in_save = false;
+		$tran_out_save = false;
+		
+		$cat_in = $this->db->query('SELECT money_category_id FROM money_catagories WHERE system = "trans_in" LIMIT 1')->row_array();
+		$cat_out = $this->db->query('SELECT money_category_id FROM money_catagories WHERE system = "trans_out" LIMIT 1')->row_array();
+		
+		$item_in = $this->load->activeModelReturn('model_money_items',array(0));
+		$item_in->family_id = $this->mylogin->user()->family_id;
+		$item_in->account_id = $this->input->post('account_id_to',0);
+		$item_in->trans_type = 1;
+		$item_in->description = mysql_real_escape_string($this->input->post('description'));
+		$item_in->date = $this->input->post('date',date('Y-m-d'));
+		$item_in->deleted = 0;
+		$item_in->added_by = $this->mylogin->user()->id();
+		$item_in->added_datetime = date('Y-m-d H:i:s');
+		$item_in->confirmed = 0;
+		$item_in->bank_date = NULL;
+		if($item_in->save()){
+			$tran_in = $this->load->activeModelReturn('model_money_transactions',array(0));
+			$tran_in->item_id = $item_in->id();
+			$tran_in->category_id = $cat_in['money_category_id'];
+			$tran_in->amount = $this->input->post('amount',0);
+			$tran_in_save = $tran_in->save();
+		}
+		
+		$item_out = $this->load->activeModelReturn('model_money_items',array(0));
+		$item_out->family_id = $this->mylogin->user()->family_id;
+		$item_out->account_id = $this->input->post('account_id_from',0);
+		$item_out->trans_type = -1;
+		$item_out->description = mysql_real_escape_string($this->input->post('description'));
+		$item_out->date = $this->input->post('date',date('Y-m-d'));
+		$item_out->deleted = 0;
+		$item_out->added_by = $this->mylogin->user()->id();
+		$item_out->added_datetime = date('Y-m-d H:i:s');
+		$item_out->confirmed = 0;
+		$item_out->bank_date = NULL;
+		if($item_out->save()){
+			$tran_out = $this->load->activeModelReturn('model_money_transactions',array(0));
+			$tran_out->item_id = $item_out->id();
+			$tran_out->category_id = $cat_out['money_category_id'];
+			$tran_out->amount = $this->input->post('amount',0);
+			$tran_out_save = $tran_out->save();
+		}
+		
+		if($tran_in_save==true && $tran_out_save==true){
+			$this->mysmarty->assign('page_title','Money');
+			$this->mysmarty->view('mobile/money/index');
+		}else{
+			echo 'Failed';
+		}
+	}
 }
 
 ?>

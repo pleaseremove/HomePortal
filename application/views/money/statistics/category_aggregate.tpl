@@ -59,6 +59,7 @@
 						<th>Dec</th>
 						<th>Total {$last_year}</th>
 						<th>Total {$cur_year}</th>
+						<th>Diff</th>
 					</tr>
 				</thead>
 				{foreach from=$table_data item=a name=data_loop}
@@ -69,7 +70,7 @@
 						{/if}
 						<tbody>
 							<tr>
-								<td colspan="15" style="text-align:left;{if !$smarty.foreach.data_loop.first}border-top:1px solid #DADADA;{/if}border-bottom:1px solid #DADADA;">{$a->top_category}</td>
+								<td colspan="16" style="text-align:left;{if !$smarty.foreach.data_loop.first}border-top:1px solid #DADADA;{/if}border-bottom:1px solid #DADADA;">{$a->top_category}</td>
 							</tr>
 					{/if}
 					
@@ -103,6 +104,7 @@
 						 <td title="Previous Year: {$a->dec1|number_format:2:".":","}">{$a->dec|number_format:2:".":","}</td>
 						 <td style="color:{if $a->total_last>$a->total_this}red{else}green{/if}">{$a->total_last}</td>
 						 <td style="color:{if $a->total_last>$a->total_this}green{else}red{/if}">{$a->total_this}</td>
+						 <td style="color:{if $type=='debits'}{if $a->total_diff>0}green{else}red{/if}{else}{if $a->total_diff>0}red{else}green{/if}{/if}">{$a->total_diff}</td>
 					</tr>
 					
 					{if !$smarty.foreach.data_loop.last}
@@ -126,6 +128,7 @@
 						 <td>{$total_dec|number_format:2:".":","}</td>
 						 <td style="color:{if $type=='debits'}{if $total_last>$total_this || $total_last!=$total_this}red{else}green{/if}{else}{if $total_last<$total_this || $total_last==$total_this}green{else}red{/if}{/if}">{$total_last}</td>
 						 <td style="color:{if $type=='debits'}{if $total_last>$total_this || $total_last==$total_this}green{else}red{/if}{else}{if $total_last<$total_this || $total_last!=$total_this}red{else}green{/if}{/if}">{$total_this}</td>
+						 <td></td>
 					</tr>
 				</tfoot>
 			</table>

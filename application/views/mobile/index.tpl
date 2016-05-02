@@ -32,8 +32,9 @@
         {if $section=='money'}
 	        <div data-role="navbar" data-iconpos="top">
 	        	<ul>
-	        		<li><a href="/mobile/money/edit/0/" data-transition="none" data-theme="a">New Transaction</a></li>
-	            <li><a href="/mobile/money/all/" data-transition="none" data-theme="a">Transactions</a></li>
+	        		<li><a href="/mobile/money/edit/0/" data-transition="none" data-theme="a">New Money</a></li>
+	        		<li><a href="/mobile/money/transfer/" data-transition="none" data-theme="a">New Transfer</a></li>
+	            <li><a href="/mobile/money/all/" data-transition="none" data-theme="a">List</a></li>
 	          </ul>
 	        </div>
 	       {/if}

@@ -127,6 +127,51 @@ class Transactions extends My_Controller {
 	
 	function save(){
 		$this->load->activeModel('model_money_items','trans_item',array($this->input->post('item_id',0)));
+		
+		if($this->trans_item->isNew() && $this->session->userdata('allow_dupe')!=1){
+			
+			$total_amount = 0;
+			
+			foreach($_POST['amount'] as $amount){
+				$total_amount+=$amount;
+			}
+			
+			//check for duplicates
+			$dupe_check = $this->load->activeModelReturn('model_money_items',array(NULL,NULL,
+				'SELECT
+					mi.*
+				FROM money_items AS mi
+				JOIN money_transactions AS mt
+					ON mi.item_id = mt.item_id
+				WHERE mi.date BETWEEN DATE_SUB(\''.$this->input->post('date',date('Y-m-d')).'\',INTERVAL 2 DAY) AND DATE_ADD(\''.$this->input->post('date',date('Y-m-d')).'\',INTERVAL 2 DAY)
+					AND mi.family_id = '.$this->mylogin->user()->family_id.'
+				GROUP BY mi.item_id
+				HAVING ROUND(SUM(mt.amount),2) = '.$total_amount));
+			
+			if(count($dupe_check)>0){
+
+				//select out the items from a nicer set of data for display
+				$duplicate_ids = array();
+
+				foreach($dupe_check as $dp){
+					$duplicate_ids[] = $dp->item_id;
+				}
+
+				$dps = $this->load->activeModelReturn('model_money_transactions',array(NULL,NULL,
+					'SELECT v_money_transactions.* FROM v_money_transactions '.$this->filters(true,false,array('filter'=>array('item_id'=>$duplicate_ids))).$this->order_by('date DESC, item_id DESC').$this->limit_by()
+				));
+
+				$this->json->setData(false);
+				$message_html = '';
+				foreach($dps as $dt){
+					$message_html.='<p title="'.date('Y-m-d',strtotime($dt->date)).'">'.$dt->account_name.': &pound;'.$dt->amount.' - '.$dt->cat_descriptions.'</p>';
+				}
+				$this->json->setMessage('Duplicate Transaction Detected.<br /><br />'.$message_html.' <br /><a href="money/transactions/allow_dupe" class="post_only">Click here</a> to unlock for this transaction',true);
+				$this->json->outputData();
+				exit();
+			}
+		}
+		
 		$this->trans_item->family_id = $this->mylogin->user()->family_id;
 		$this->trans_item->account_id = $this->input->post('account_id',0);
 		$this->trans_item->trans_type = $this->input->post('trans_type',-1);
@@ -154,8 +199,17 @@ class Transactions extends My_Controller {
 			}
 		}
 		
+		$this->session->unset_userdata('allow_dupe');
+		
 		$this->json->setData(true);
 		$this->json->setMessage('Transaction Saved');
+		$this->json->outputData();
+	}
+	
+	function allow_dupe(){
+		$this->session->set_userdata('allow_dupe',1);
+		$this->json->setData(true);
+		$this->json->setMessage('Duplication Allowed');
 		$this->json->outputData();
 	}
 	

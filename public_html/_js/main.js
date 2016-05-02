@@ -1,8 +1,8 @@
 $(function() {
-	
+
 	//system wide call structure
 	$.system = {
-		
+
 		/*local vars*/
 		layout : null,
 		layout_selector : $('body'),
@@ -12,7 +12,7 @@ $(function() {
 		layout_selector_search: '#search_results',
 		current_url: '',
 		current_data_grid: null,
-		system_clock : $('#clock'),
+		system_clock : $('#date_time'),
 
 		get_json : function(url,callback,post){
 			$.ajax({
@@ -25,8 +25,12 @@ $(function() {
 				}
 			}).error(function(){ $.system.message('There was a system error, please try again and if this continues alert your system administrator','error')});
 		},
-		
+
 		ajax_complete : function(return_data,callback){
+
+			//everything went well, time to update the clock date
+			$.system.system_clock.html($.fullCalendar.formatDate(new Date(),'dddd, d&S% MMMM yyyy').replace('&','<sup>').replace('%','</sup>'));
+
 			if(return_data.state){
 				if(return_data.message!=''){
 					$.system.message(return_data.message);
@@ -37,11 +41,11 @@ $(function() {
 		  		$.system.message('You have been logged out','error');
 		  		window.location = '/';
 		  	}else if(return_data.message!=''){
-		  		$.system.message(return_data.message,'alert');
+		  		$.system.message(return_data.message,'alert',return_data.message_fixed);
 		  	}
 		  }
 		},
-		
+
 		submit_form : function($form,callback){
 			$form.ajaxSubmit({
 				type : 'post',
@@ -50,14 +54,17 @@ $(function() {
 				success : callback
 			});
 		},
-		
-		message : function(message,type){
+
+		message : function(message,type,fixed){
 			type = typeof type !== 'undefined' ? type : 'message';
 			var sticky_var = (type=='error' ? true : false);
+			if(fixed){
+				sticky_var = true;
+			}
 			var life_var = (type=='alert' ? 5000 : 3000);
 			$.jGrowl(message, { life: life_var, theme: 'notification_'+type, sticky: sticky_var });
 		},
-		
+
 		layout_setup : function(){
 			this.layout = this.layout_selector.layout({
 				north__paneSelector: this.layout_selector_header,
@@ -82,18 +89,18 @@ $(function() {
 				onresize: function(){$.system.resize_all();}
 			});
 		},
-		
+
 		resize_all : function(){
 			if($('#content').hasClass('spacing')){
 				$('#content').height($('#main').height()-($('#title_bar').outerHeight()+20)-$('#filter').outerHeight());
 			}else{
 				$('#content').height($('#main').height()-$('#title_bar').outerHeight()-$('#filter').outerHeight());
 			}
-			
+
 			if($.system.current_data_grid!==null){
 				$.system.current_data_grid.datagrid('fixed_thead_update');
 			}
-			
+
 			if(typeof menu_scroller !== "undefined"){
 				menu_scroller.tinyscrollbar_update();
 			}
@@ -101,25 +108,25 @@ $(function() {
 				search_scroller.tinyscrollbar_update();
 			}
 		},
-		
+
 		click_event : function(url,$item,event,callback,menu_selection){
 			this.current_url = url;
 			if(event!==null){
 				event.preventDefault();
 			}
-  		
+
   		if($item.hasClass('model')){
   			if($item.attr('data-title')){
   				var window_title = $item.attr('data-title');
   			}else{
   				var window_title = $item.text();
   			}
-  			
+
   			var width = ($item.attr('data-width') ? $item.attr('data-width') : 650);
   			var height = ($item.attr('data-height') ? $item.attr('data-height') : 500);
-  				
+
   			$.system.model_window(url,window_title,width,height,function($form){
-					
+
 					$.system.submit_form($form,function(return_info){
 						$.system.ajax_complete(return_info,function(){
 		    			$form.parent().dialog("close");
@@ -132,33 +139,40 @@ $(function() {
 
   		}else{
   			this.get_json(url,function(return_html){
-  				if($('div.data_grid').size()>0){
-  					$('div.data_grid').datagrid('destroy');
-  					$.system.current_data_grid = null;
+
+  				if(!$item.hasClass('post_only')){
+
+  					if($('div.data_grid').size()>0){
+	  					$('div.data_grid').datagrid('destroy');
+	  					$.system.current_data_grid = null;
+	  				}
+
+	  				$('#main').html(return_html);
+			  		if($('div.data_grid:not(.style_only)').size()>0){
+			  			$.system.current_data_grid = $('div.data_grid:not(.style_only)').datagrid();
+			  		}
+			  		if(typeof callback==='function'){callback();}
+			  		if(menu_selection!==null){
+			  			$('#menu a').removeClass('active').filter($('#menu a[data-selection='+menu_selection+']').addClass('active'));
+			  		}
+			  		if(history){
+			  			if($item.get(0).tagName=='TR'){
+			  				var link_name = $item.find('td:first').text();
+			  			}else{
+			  				var link_name = $item.text();
+			  			}
+							//history.pushState({h_url:url,menu_selection:menu_selection},link_name, url);
+						}else{
+							//window.location.hash='!'+url;
+						}
+			  		$.system.resize_all();
+
   				}
-		  		$('#main').html(return_html);
-		  		if($('div.data_grid:not(.style_only)').size()>0){
-		  			$.system.current_data_grid = $('div.data_grid:not(.style_only)').datagrid();
-		  		}
-		  		if(typeof callback==='function'){callback();}
-		  		if(menu_selection!==null){
-		  			$('#menu a').removeClass('active').filter($('#menu a[data-selection='+menu_selection+']').addClass('active'));
-		  		}
-		  		if(history){
-		  			if($item.get(0).tagName=='TR'){
-		  				var link_name = $item.find('td:first').text();
-		  			}else{
-		  				var link_name = $item.text();
-		  			}
-						//history.pushState({h_url:url,menu_selection:menu_selection},link_name, url);
-					}else{
-						//window.location.hash='!'+url;
-					}
-		  		$.system.resize_all();
+
   			});
   		}
 		},
-		
+
 		go_back_js : function(state){
 			if(typeof state !== 'undefined' && typeof state.h_url !== 'null'){
 				this.get_json(state.h_url,function(return_html){
@@ -178,14 +192,14 @@ $(function() {
 			  });
 			}
 		},
-		
+
 		model_window : function(url,title,width,height,save_function,callback){
 			this.get_json(url,function(return_html){
-				
+
 				if($('#popup').is(':data(dialog)')){
 					$("#popup").dialog("destroy");
 				}
-				
+
 				$("#popup").html(return_html).dialog({
 					modal: true,
 					title: title,
@@ -200,27 +214,27 @@ $(function() {
 						}
 					}
 				});
-				
+
 				if(typeof callback==='function'){callback($("#popup"));}
-				
+
 			});
 		}
 	}
 
 	$.system.layout_setup();
 	$.system.resize_all();
-	
+
 	$(document).on('click','a:not(table.ui-datepicker-calendar a, .ui-datepicker-header a), *[data-click]',function(event){
 		var $self = $(this);
-		
+
 		event.stopPropagation();
-		
+
 		if($self.get(0).tagName=='A'){
 			var url = $self.attr('href');
 		}else{
 			var url = $self.attr('data-click');
 		}
-		
+
 		if($self.hasClass('new_window')){
 			event.preventDefault();
 			window.open(url,'_blank');
@@ -233,13 +247,13 @@ $(function() {
 			}
 		}
   });
-  
+
   $(document).on('click','.tabs_box ul li',function(){
   	$(this).parent().find('li').removeClass('active').filter($(this).addClass('active'));
   	$tabs = $(this).parent().parent();
   	$tabs.find('.tab').hide().filter($tabs.find('.'+$(this).attr('data-tab')).show());
   });
-  
+
   $(document).on('mouseover','.date_picker, .time_picker',function(){
   	if($(this).hasClass('date_picker')){
   		$(this).datepicker('destroy').datepicker({
@@ -249,7 +263,7 @@ $(function() {
 				dateFormat: "yy-mm-dd"
 			});
   	}
-  	
+
   	if($(this).hasClass('time_picker')){
   		$(this).timepicker({
 				hourGrid: 4,
@@ -258,9 +272,9 @@ $(function() {
 				showButtonPanel: false
 			});
   	}
-  	
+
   });
-  
+
   $(document).on('submit','form:not(#header_search)',function(event){
   	event.preventDefault();
   	$.system.submit_form($(this),function(return_info){
@@ -268,9 +282,9 @@ $(function() {
 				$('#main').html(return_html);
 				$.system.resize_all();
 			});
-		});			
+		});
   });
-  
+
   $('#header_search').bind('submit',function(event){
   	event.preventDefault();
   	$.system.get_json('/search',function(return_html){
@@ -280,16 +294,16 @@ $(function() {
 			$.system.resize_all();
 		},'search='+$('#header_search input').val());
   });
-  
+
   $('#search_close').bind('click',function(){
   	$('#search_results .overview').html('');
   	$.system.layout.close('east');
   	$(this).hide();
   	$('#header_search input').val('');
   });
-  
+
   $('#load_status').hide();
-	
+
 	$(document).ajaxStart(function(){
 		$('#load_status').show();
 	}).ajaxStop(function(){
@@ -297,29 +311,15 @@ $(function() {
 	}).ajaxError(function(){
 		$('#load_status').hide();
 	});
-	
+
 	var menu_scroller = $('#menu').tinyscrollbar({wheel: 20});
 	var search_scroller = $('#search_results').tinyscrollbar({wheel: 20});
-	
+
 	//record current initial state
 	//history.replaceState({h_url: document.location.href,menu_selection:'overview'},'Dashboard',document.location.href);
-	
+
 	//on pop state load the last page
 	//window.onpopstate = function(event) {
 	//	$.system.go_back_js(event.state);
 	//};
-	//getthetime();
-	//setInterval(function(){getthetime();},1000);
 });
-
-function getthetime(){
-	var mydate=new Date()
-	var hours=mydate.getHours();
-	var minutes=mydate.getMinutes();
-	var dn="am";
-	if(hours>=12){dn="pm"}
-	if(hours>12){hours=hours-12}
-	if(hours==0){hours=12}
-	if(minutes<=9){minutes="0"+minutes}
-	$.system.system_clock.text(hours+":"+minutes+dn);
-}

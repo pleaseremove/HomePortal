@@ -8,6 +8,7 @@
 		<td>{$c->home_phone}</td>
 		<td><a href="mailto:{$c->email}" class="click-through">{$c->email}</a></td>
 		<td {if isset($c->facebook)}data-click="http://www.facebook.com/profile.php?id={$c->facebook}" class="new_window"{/if}>{if isset($c->facebook)}View{/if}</td>
+		<td>{$c->sms_count}</td>
 	</tr>
 {foreachelse}
 	<tr>

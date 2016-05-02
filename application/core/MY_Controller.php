@@ -40,6 +40,8 @@ class My_Controller extends CI_Controller {
 					if($by==='0' || !empty($by)){
 						if(is_numeric($by)){
 							$filters[] = $what.' = '.$this->db->escape($by);
+						}elseif(is_array($by)){
+							$filters[] = $what.' IN (\''.implode('\',\'',$this->db->escape($by)).'\')';
 						}elseif(count(explode(',',$by))>1){
 							$bits = explode(',',$by);
 							$filters[] = $what.' IN (\''.implode('\',\'',$this->db->escape($bits)).'\')';

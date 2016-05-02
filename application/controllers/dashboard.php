@@ -71,7 +71,7 @@ class Dashboard extends My_Controller {
 		
 		//calendar events
 		$this->mysmarty->assign('events',$this->load->activeModelReturn('model_calendar_events',array(NULL,'
-			where family_id = '.$this->mylogin->user()->family_id.' and (private = 0 OR created_by = '.$this->mylogin->user()->id().') and start_date >= NOW() order by start_date ASC LIMIT 10
+			where family_id = '.$this->mylogin->user()->family_id.' and (private = 0 OR created_by = '.$this->mylogin->user()->id().') and DATE(start_date) >= DATE(NOW()) order by start_date ASC LIMIT 10
 		')));
 	}
 }

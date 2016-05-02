@@ -1,25 +1,25 @@
 <?php
 
 class Search_model extends CI_Model {
-  
+
   function run_search($search_term='',$offset=0, $limit=100)
 	{
 	  $reselts = $this->db->query("SELECT SQL_CALC_FOUND_ROWS `text`,`type`, `modal`, `link`,`selection`,AVG(`score`) AS `score` FROM (
-	  
+
 																	(SELECT
 																		  CONCAT(cm.first_name,' ',cm.last_name) AS `text`,
 																		  'contact' AS `type`,
 																		  'contacts' AS `selection`,
 																		  '0' AS `modal`,
 																		  CONCAT('/contacts/view/',cm.contact_id) as `link`,
-																		  MATCH (cm.first_name,cm.other_names,cm.last_name,cm.notes) AGAINST ('".$this->db->escape_str($search_term)."') as `score`
+																		  MATCH (cm.first_name,cm.other_names,cm.last_name,cm.notes,cm.maiden_name) AGAINST ('".$this->db->escape_str($search_term)."') as `score`
 																		FROM contacts_main AS cm
 																		WHERE cm.family_id = ".$this->mylogin->user()->family_id."
 																		  AND (cm.private = 0 OR cm.created_by = ".$this->mylogin->user()->id().")
-																		  AND MATCH (cm.first_name,cm.other_names,cm.last_name,cm.notes) AGAINST ('".$this->db->escape_str($search_term)."'))
-																		  
+																		  AND MATCH (cm.first_name,cm.other_names,cm.last_name,cm.notes,cm.maiden_name) AGAINST ('".$this->db->escape_str($search_term)."'))
+
 																	UNION
-																	
+
 																	(SELECT
 																		  CONCAT(cm.first_name,' ',cm.last_name) AS `text`,
 																		  'contact' AS `type`,
@@ -33,9 +33,9 @@ class Search_model extends CI_Model {
 																		WHERE cm.family_id = ".$this->mylogin->user()->family_id."
 																		  AND (cm.private = 0 OR cm.created_by = ".$this->mylogin->user()->id().")
 																		  AND MATCH (ca.name,ca.house,ca.road,ca.town,ca.county,ca.postcode,ca.country) AGAINST ('".$this->db->escape_str($search_term)."'))
-																		
+
 																	UNION
-																	
+
 																	(SELECT
 																		  CONCAT(cm.first_name,' ',cm.last_name) AS `text`,
 																		  'contact' AS `type`,
@@ -52,9 +52,9 @@ class Search_model extends CI_Model {
 																		  AND (cm.private = 0 OR cm.created_by = ".$this->mylogin->user()->id().")
 																		  AND MATCH (cd.`data`) AGAINST ('".$this->db->escape_str($search_term)."')
 																		GROUP BY cm.contact_id)
-																		
+
 																	UNION
-																	
+
 																	(SELECT
 																	  t.name AS `text`,
 																	  'task' AS `type`,
@@ -66,9 +66,9 @@ class Search_model extends CI_Model {
 																	WHERE t.family_id = ".$this->mylogin->user()->family_id."
 																		AND (t.private = 0 OR t.user_created = ".$this->mylogin->user()->id().")
 																	  AND MATCH (t.name,t.details) AGAINST ('".$this->db->escape_str($search_term)."'))
-																	  
+
 																	UNION
-																	
+
 																	(SELECT
 																	  CONCAT(DAY(start_date),'/',MONTH(start_date),'/',YEAR(start_date),' - ',c.title) AS `text`,
 																	  'calendar' AS `type`,
@@ -80,9 +80,9 @@ class Search_model extends CI_Model {
 																	WHERE c.family_id = ".$this->mylogin->user()->family_id."
 																		AND (c.private = 0 OR c.created_by = ".$this->mylogin->user()->id().")
 																	  AND MATCH (c.title,c.description,c.location) AGAINST ('".$this->db->escape_str($search_term)."'))
-																	
+
 																	UNION
-																	
+
 																	(SELECT
 																	  CONCAT(mc.description,': ',DAY(mi.date),'/',MONTH(mi.date),'/',YEAR(mi.date),' - &pound;',ROUND(m.amount,2)) AS `text`,
 																	  'money' AS `type`,
@@ -97,9 +97,9 @@ class Search_model extends CI_Model {
 																		ON m.category_id = mc.money_category_id
 																	WHERE mi.family_id = ".$this->mylogin->user()->family_id."
 																	  AND MATCH (mi.description) AGAINST ('".$this->db->escape_str($search_term)."'))
-																	  
+
 																	UNION
-																	
+
 																	(SELECT
 																	  CONCAT(ii.name) AS `text`,
 																	  'inventory' AS `type`,
@@ -110,9 +110,9 @@ class Search_model extends CI_Model {
 																	FROM inventory_items AS ii
 																	WHERE ii.family_id = ".$this->mylogin->user()->family_id."
 																	  AND MATCH (ii.name,ii.description) AGAINST ('".$this->db->escape_str($search_term)."'))
-																	  
+
 																	/*UNION
-																	
+
 																	(SELECT
 																	  n.name AS `text`,
 																	  'note' AS `type`,
@@ -130,7 +130,7 @@ class Search_model extends CI_Model {
 																GROUP BY `link`
 																ORDER BY AVG(`score`) DESC
 																LIMIT ".$offset.",".$limit);
-		
+
 	  $return_data['data'] = $reselts->result_array();
 	  $temp = $this->db->query('SELECT FOUND_ROWS() AS row_count');
 	  $temp = $temp->row_array();
