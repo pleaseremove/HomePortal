@@ -38,19 +38,14 @@
 		</div>
 		
 		<div data-role="fieldcontain">
-			<label for="important" class="select">Important:</label>
-			<select name="important" id="important">
-				<option value="0" {if isset($ci->event->important) && $ci->event->important==0} selected="selected"{/if}>No</option>
-				<option value="1" {if isset($ci->event->important) && $ci->event->important==1} selected="selected"{/if}>Yes</option>
-			</select>
-		</div>
-		
-		<div data-role="fieldcontain">
-			<label for="private" class="select">Private:</label>
-			<select name="private" id="private">
-				<option value="0" {if isset($ci->event->private) && $ci->event->private==0} selected="selected"{/if}>No</option>
-				<option value="1" {if isset($ci->event->private) && $ci->event->private==1} selected="selected"{/if}>Yes</option>
-			</select>
+    <fieldset data-role="controlgroup" data-iconpos="right">
+        <input name="important" id="important" type="checkbox" value="1" {if isset($ci->event->important) && $ci->event->important==1} checked="checked" {/if}>
+        <label for="important">Important</label>
+        <input name="private" id="private" type="checkbox" value="1" {if isset($ci->event->private) && $ci->event->private==1} checked="checked" {/if}>
+        <label for="private">Private</label>
+        <input name="tentative" id="tentative" type="checkbox" value="1" {if isset($ci->event->tentative) && $ci->event->tentative==1} checked="checked" {/if}>
+        <label for="tentative">Tentative</label>
+    </fieldset>
 		</div>
 		
 		<input type="hidden" value="{$ci->event->id()}" name="event_id" />
@@ -71,11 +66,11 @@
 			}
 		});
 		
-		$('input[name=start_date]').bind('blur',function(){
+		$('input[name=start_date]').bind('change',function(){
 			$('input[name=end_date]').val($(this).val());
 		});
 		
-		$('input[name=start_time]').bind('blur',function(){
+		$('input[name=start_time]').bind('change',function(){
 			$('input[name=end_time]').val($(this).val());
 		});
 		
