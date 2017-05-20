@@ -1,9 +1,9 @@
 <?PHP  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class model_calendar_events extends ActiveRecord {
-	
+
 	protected $PRIMARYID = 'event_id';
-	
+
 	public function get_events($start_unix,$end_unix){
 		$sql = "SELECT * FROM (
 			SELECT
@@ -24,9 +24,9 @@ class model_calendar_events extends ActiveRecord {
 				)
 			  AND (private = 0 OR created_by = ".$this->CI->mylogin->user()->id().")
 		    AND family_id = ".$this->CI->mylogin->user()->family_id."
-			
+
 			UNION
-			
+
 			SELECT
 		   CONCAT('b',contact_id) as event_id,
 		   contact_id as 'rel_id',
@@ -68,7 +68,7 @@ class model_calendar_events extends ActiveRecord {
 	     day(birthday) as `day`
 		 FROM contacts_main
 		 WHERE
-		   IF(DAYOFYEAR(FROM_UNIXTIME(".$start_unix.")) < DAYOFYEAR(FROM_UNIXTIME(".$end_unix.")), 
+		   IF(DAYOFYEAR(FROM_UNIXTIME(".$start_unix.")) < DAYOFYEAR(FROM_UNIXTIME(".$end_unix.")),
 		   (
 		     DAYOFYEAR(birthday) >= DAYOFYEAR(FROM_UNIXTIME(".$start_unix."))
 		     AND DAYOFYEAR(birthday) <= DAYOFYEAR(FROM_UNIXTIME(".$end_unix."))
@@ -80,9 +80,9 @@ class model_calendar_events extends ActiveRecord {
 		  AND contacts_main.deleted <> 1
 		  AND (private = 0 OR created_by = ".$this->CI->mylogin->user()->id().")
 		  AND family_id = ".$this->CI->mylogin->user()->family_id."
-		  
+
 		  UNION
-		  
+
 		  SELECT
 		   CONCAT('b',parent_1_id) as event_id,
 		   parent_1_id as 'rel_id',
@@ -126,7 +126,7 @@ class model_calendar_events extends ActiveRecord {
 		 JOIN contacts_main AS cm
 		 		ON cc.parent_1_id = cm.contact_id
 		 WHERE
-		   IF(DAYOFYEAR(FROM_UNIXTIME(".$start_unix.")) < DAYOFYEAR(FROM_UNIXTIME(".$end_unix.")), 
+		   IF(DAYOFYEAR(FROM_UNIXTIME(".$start_unix.")) < DAYOFYEAR(FROM_UNIXTIME(".$end_unix.")),
 		   (
 		     DAYOFYEAR(cc.birthday) >= DAYOFYEAR(FROM_UNIXTIME(".$start_unix."))
 		     AND DAYOFYEAR(cc.birthday) <= DAYOFYEAR(FROM_UNIXTIME(".$end_unix."))
@@ -138,9 +138,9 @@ class model_calendar_events extends ActiveRecord {
 		  AND cm.deleted <> 1
 		  AND (cm.private = 0 OR cm.created_by = ".$this->CI->mylogin->user()->id().")
 		  AND cm.family_id = ".$this->CI->mylogin->user()->family_id."
-		  
+
 		  UNION
-		  
+
 		  SELECT
 		    CONCAT('a',contact_id) as event_id,
 		    contact_id as 'rel_id',
@@ -182,7 +182,7 @@ class model_calendar_events extends ActiveRecord {
 		    day(aniversary) as `day`
 		  FROM contacts_main
 		  WHERE
-		    IF(DAYOFYEAR(FROM_UNIXTIME(".$start_unix.")) < DAYOFYEAR(FROM_UNIXTIME(".$end_unix.")), 
+		    IF(DAYOFYEAR(FROM_UNIXTIME(".$start_unix.")) < DAYOFYEAR(FROM_UNIXTIME(".$end_unix.")),
 		    (
 		      DAYOFYEAR(aniversary) >= DAYOFYEAR(FROM_UNIXTIME(".$start_unix."))
 		      AND DAYOFYEAR(aniversary) <= DAYOFYEAR(FROM_UNIXTIME(".$end_unix."))
@@ -194,9 +194,9 @@ class model_calendar_events extends ActiveRecord {
 		   AND contacts_main.deleted <> 1
 		   AND (private = 0 OR created_by = ".$this->CI->mylogin->user()->id().")
 		   AND family_id = ".$this->CI->mylogin->user()->family_id."
-		   
+
 		   UNION
-		   
+
 		   SELECT
 				  CONCAT('t',`task_id`) as event_id,
 				  task_id as 'rel_id',
@@ -217,22 +217,35 @@ class model_calendar_events extends ActiveRecord {
 		) AS event_data
 		ORDER BY start_date
 		";
-		
+
 		return $this->CI->load->activeModelReturn('model_calendar_events',array(NULL,NULL,$sql));
 	}
-	
+
 	public function dateToCal($start_end='start') {
 		if($start_end=='start'){
-			return date('Ymd'.($this->all_day==0 ? '\THis\Z':''), strtotime($this->start_date.''.$this->start_time));
+			$date = DateTime::createFromFormat('Y-m-d H:i:s', $this->start_date.''.$this->start_time);
+			//$date = strtotime($this->start_date.''.$this->start_time);
+			$start_string = 'DTSTART';
 		}else{
-			return date('Ymd'.($this->all_day==0 ? '\THis\Z':''), strtotime($this->end_date.''.$this->end_time));
+			$date = DateTime::createFromFormat('Y-m-d H:i:s', $this->end_date.''.$this->end_time);
+			//$date = strtotime($this->end_date.''.$this->end_time);
+			$start_string = 'DTEND';
+		}
+
+		if($this->all_day==0){
+			return $start_string.':'.$date->format('Ymd\THis\Z').'+01:00';
+		}else{
+			if($start_end=='end'){
+				$date->modify('+1 day');
+			}
+			return $start_string.';VALUE=DATE:'.$date->format('Ymd');
 		}
 	}
- 
+
 	public function escapeStringIcal($string) {
 		return preg_replace('/([\,;])/','\\\$1', $string);
 	}
-	
+
 	/*public function get_events_by_parts($year,$month,$day){
 		$sql = "SELECT * FROM (
 			SELECT
@@ -247,9 +260,9 @@ class model_calendar_events extends ActiveRecord {
 			WHERE year(start_date) = ".$year." AND month(start_date) = ".$month." AND day(start_date) = ".$day."
 			  AND (private = 0 OR created_by = ".$this->CI->mylogin->user()->id().")
 		    AND family_id = ".$this->CI->mylogin->user()->family_id."
-			
+
 			UNION
-			
+
 			SELECT
 		   CONCAT('b',contact_id) as event_id,
 		   contact_id as 'rel_id',
@@ -264,9 +277,9 @@ class model_calendar_events extends ActiveRecord {
 		  AND contacts_main.deleted <> 1
 		  AND (private = 0 OR created_by = ".$this->CI->mylogin->user()->id().")
 		  AND family_id = ".$this->CI->mylogin->user()->family_id."
-		  
+
 		  UNION
-		  
+
 		  SELECT
 		    CONCAT('a',contact_id) as event_id,
 		    contact_id as 'rel_id',
@@ -281,9 +294,9 @@ class model_calendar_events extends ActiveRecord {
 		   AND contacts_main.deleted <> 1
 		   AND (private = 0 OR created_by = ".$this->CI->mylogin->user()->id().")
 		   AND family_id = ".$this->CI->mylogin->user()->family_id."
-		   
+
 		   UNION
-		   
+
 		   SELECT
 				  CONCAT('t',`task_id`) as event_id,
 				  task_id as 'rel_id',
@@ -298,7 +311,7 @@ class model_calendar_events extends ActiveRecord {
 				   AND (private = 0 OR user_created = ".$this->CI->mylogin->user()->id().")
 				   AND family_id = ".$this->CI->mylogin->user()->family_id."
 		) AS event_data";
-		
+
 		return $this->CI->load->activeModelReturn('model_calendar_events',array(NULL,NULL,$sql));
 	}*/
 }
